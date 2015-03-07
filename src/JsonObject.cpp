@@ -31,7 +31,7 @@ JsonVariant &JsonObject::operator[](const char *key) {
   // try to find an existing node
   node_type *node = getNodeAt(key);
 
-  // not fount => create a new one
+  // not found => create a new one
   if (!node) {
     node = createNode();
     if (!node) return JsonVariant::invalid();
