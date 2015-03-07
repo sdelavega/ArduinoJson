@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdint.h>  // for uint8_t
 
+#include "Arduino/String.hpp"
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
@@ -64,6 +65,9 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
 
   // Sets the variant to be a string.
   void set(const char *value);
+
+  // Sets the variant to be a string.
+  void set(const String &value) { set(value.c_str()); }
 
   // Sets the variant to be a reference to an array.
   void set(JsonArray &array);
