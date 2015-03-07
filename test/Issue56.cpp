@@ -34,3 +34,17 @@ TEST(Issue56, UseStringAsValueOfAnArray) {
   a.printTo(json, sizeof(json));
   ASSERT_STREQ("[\"value\"]", json);
 }
+
+TEST(Issue56, UseStringAsKeyOfAnObject) {
+  DynamicJsonBuffer jsonBuffer;
+
+  JsonObject& o = jsonBuffer.createObject();
+  String s = "key";
+
+  o[s] = "value";
+  ASSERT_STREQ("value", o["key"]);
+
+  char json[128];
+  o.printTo(json, sizeof(json));
+  ASSERT_STREQ("{\"key\":\"value\"}", json);
+}

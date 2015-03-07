@@ -44,17 +44,31 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Returns a reference or JsonVariant::invalid() if not found.
   JsonVariant &at(key_type key);
 
+  // Alias to use an Arduino String as a key
+  JsonVariant &at(const String &key) { return at(key.c_str()); }
+
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
   const JsonVariant &at(key_type key) const;
+
+  // Alias to use an Arduino String as a key
+  const JsonVariant &at(const String &key) const { return at(key.c_str()); }
 
   // Gets or create the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if allocation failed.
   JsonVariant &operator[](key_type key);
 
+  // Alias to use an Arduino String as a key
+  JsonVariant &operator[](const String &key) { return operator[](key.c_str()); }
+
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
   const JsonVariant &operator[](key_type key) const { return at(key); }
+
+  // Alias to use an Arduino String as a key
+  const JsonVariant &operator[](const String &key) const {
+    return operator[](key.c_str());
+  }
 
   // Adds an uninitialized JsonVariant associated with the specified key.
   // Return a reference or JsonVariant::invalid() if allocation fails.
