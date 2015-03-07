@@ -128,6 +128,9 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Removes the specified key and the associated value.
   void remove(key_type key);
 
+  // Alias to use a String (not recommended as it uses dynamic allocation)
+  void remove(const String &key) { remove(key.c_str()); }
+
   // Returns a reference an invalid JsonObject.
   // This object is meant to replace a NULL pointer.
   // This is used when memory allocation or JSON parsing fail.
