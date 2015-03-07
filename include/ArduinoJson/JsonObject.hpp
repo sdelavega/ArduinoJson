@@ -92,8 +92,14 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Adds the specified key with a reference to the specified JsonArray.
   void add(key_type key, JsonArray &array) { add(key).set(array); }
 
+  // Alias to use an Arduino String as a key
+  void add(const String &key, JsonArray &array) { add(key.c_str(), array); }
+
   // Adds the specified key with a reference to the specified JsonObject.
   void add(key_type key, JsonObject &object) { add(key).set(object); }
+
+  // Alias to use an Arduino String as a key
+  void add(const String &key, JsonObject &object) { add(key.c_str(), object); }
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
@@ -107,6 +113,11 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Creates and adds a JsonObject.
   // This is a shortcut for JsonBuffer::createObject() and JsonObject::add().
   JsonObject &createNestedObject(key_type key);
+
+  // Alias to use an Arduino String as a key
+  JsonObject &createNestedObject(const String &key) {
+    return createNestedObject(key.c_str());
+  }
 
   // Tells weither the specified key is present and associated with a value.
   bool containsKey(key_type key) const { return at(key).success(); }
