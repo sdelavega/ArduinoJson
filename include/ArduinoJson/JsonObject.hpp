@@ -74,10 +74,19 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Return a reference or JsonVariant::invalid() if allocation fails.
   JsonVariant &add(key_type key) { return (*this)[key]; }
 
+  // Alias to use an Arduino String as a key
+  JsonVariant &add(const String &key) { return add(key.c_str()); }
+
   // Adds the specified key with the specified value.
   template <typename T>
   void add(key_type key, T value) {
     add(key).set(value);
+  }
+
+  // Alias to use an Arduino String as a key
+  template <typename T>
+  void add(const String &key, T value) {
+    add(key.c_str(), value);
   }
 
   // Adds the specified key with a reference to the specified JsonArray.
