@@ -84,9 +84,19 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   }
 
   // Alias to use a String (not recommended as it uses dynamic allocation)
+  void add(key_type key, const String & value) {
+    add(key).set(value);
+  }
+  
+  // Alias to use a String (not recommended as it uses dynamic allocation)
   template <typename T>
   void add(const String &key, T value) {
     add(key.c_str(), value);
+  }
+
+  // Alias to use a String (not recommended as it uses dynamic allocation)
+  void add(const String &key, const String & value) {
+    add(key.c_str(), value.c_str());
   }
 
   // Adds the specified key with a reference to the specified JsonArray.

@@ -53,6 +53,11 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
     add().set(value);
   }
 
+  // Alias to use a String (not recommended as it uses dynamic allocation)
+  void add(const String &value) {
+    add(value.c_str());
+  }
+
   // Adds the specified double value at the end of the array.
   // The value will be printed with the specified number of decimal digits.
   void add(double value, uint8_t decimals) { add().set(value, decimals); }

@@ -94,6 +94,12 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
     return *this;
   }
 
+  // Alias to use a String (not recommended as it uses dynamic allocation)
+  JsonVariant &operator=(const String &str) {
+    set(str);
+    return *this;
+  }
+
   // Gets the variant as a boolean value.
   // Returns false if the variant is not a boolean value.
   operator bool() const;
