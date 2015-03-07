@@ -76,3 +76,32 @@ TEST(Issue56, AddStringAsKeyOfAnObject_Syntax3) {
   o.printTo(json, sizeof(json));
   ASSERT_STREQ("{\"key\":\"value\"}", json);
 }
+
+TEST(Issue56, AddStringAsKeyOfANestedArray_Syntax1) {
+  DynamicJsonBuffer jsonBuffer;
+
+  JsonObject& o = jsonBuffer.createObject();
+  JsonArray& a = jsonBuffer.createArray();
+  String s = "key";
+
+  o.add(s) = a;
+  ASSERT_EQ(&a, &o[s].asArray());
+
+  char json[128];
+  o.printTo(json, sizeof(json));
+  ASSERT_STREQ("{\"key\":[]}", json);
+}
+
+TEST(Issue56, AddStringAsKeyOfANestedArray_Syntax2) {
+  DynamicJsonBuffer jsonBuffer;
+
+  JsonObject& o = jsonBuffer.createObject();
+  String s = "key";
+
+  JsonArray& a = o.createNestedArray(s);
+  ASSERT_EQ(&a, &o[s].asArray());
+
+  char json[128];
+  o.printTo(json, sizeof(json));
+  ASSERT_STREQ("{\"key\":[]}", json);
+}

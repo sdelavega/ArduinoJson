@@ -99,6 +99,11 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
   JsonArray &createNestedArray(key_type key);
 
+  // Alias to use an Arduino String as a key
+  JsonArray &createNestedArray(const String &key) {
+    return createNestedArray(key.c_str());
+  }
+
   // Creates and adds a JsonObject.
   // This is a shortcut for JsonBuffer::createObject() and JsonObject::add().
   JsonObject &createNestedObject(key_type key);
