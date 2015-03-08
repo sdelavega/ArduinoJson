@@ -28,13 +28,20 @@ class JsonObject_PrintTo_Tests : public testing::Test {
 
 TEST_F(JsonObject_PrintTo_Tests, EmptyObject) { outputMustBe("{}"); }
 
-TEST_F(JsonObject_PrintTo_Tests, OneString) {
+TEST_F(JsonObject_PrintTo_Tests, OneCharPtr) {
   object["key"] = "value";
 
   outputMustBe("{\"key\":\"value\"}");
 }
 
-TEST_F(JsonObject_PrintTo_Tests, TwoStrings) {
+TEST_F(JsonObject_PrintTo_Tests, OneString) {
+  String value = "value";
+  object["key"] = value;
+
+  outputMustBe("{\"key\":\"value\"}");
+}
+
+TEST_F(JsonObject_PrintTo_Tests, TwoCharPtrs) {
   object["key1"] = "value1";
   object["key2"] = "value2";
 
@@ -72,7 +79,7 @@ TEST_F(JsonObject_PrintTo_Tests, ReplaceExistingKey) {
   outputMustBe("{\"key\":\"value2\"}");
 }
 
-TEST_F(JsonObject_PrintTo_Tests, OneStringOverCapacity) {
+TEST_F(JsonObject_PrintTo_Tests, OneCharPtrOverCapacity) {
   object["key1"] = "value1";
   object["key2"] = "value2";
   object["key3"] = "value3";

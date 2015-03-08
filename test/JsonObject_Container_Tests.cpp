@@ -81,12 +81,28 @@ TEST_F(JsonObject_Container_Tests, CanStoreBooleans) {
   EXPECT_FALSE(_object["world"].as<bool>());
 }
 
-TEST_F(JsonObject_Container_Tests, CanStoreStrings) {
+TEST_F(JsonObject_Container_Tests, CanStoreCharPtrs) {
   _object["hello"] = "h3110";
-  _object["world"] = "w0r1d";
+  _object.add("world", "w0r1d");
+  _object.add("!") = "!!!";
 
   EXPECT_STREQ("h3110", _object["hello"].as<const char*>());
   EXPECT_STREQ("w0r1d", _object["world"].as<const char*>());
+  EXPECT_STREQ("!!!", _object.at("!").as<const char*>());
+}
+
+TEST_F(JsonObject_Container_Tests, CanStoreStrings) {
+  String hello = "h3110";
+  String world = "w0r1d";
+  String sign  = "!!!";
+
+  _object["hello"] = hello;
+  _object.add("world", world);
+  _object.add("!") = sign;
+
+  EXPECT_EQ(hello, _object["hello"]);
+  EXPECT_EQ(world, _object["world"]);
+  EXPECT_EQ(sign,  _object.at("!"));
 }
 
 TEST_F(JsonObject_Container_Tests, CanStoreInnerArrays) {
