@@ -83,6 +83,12 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
     add(key).set(value);
   }
 
+  // Adds the specified double
+  template <typename TKey>
+  void add(TKey key, double value, uint8_t digits) {
+    add(key).set(value, digits);
+  }
+
   // Alias to use a String (not recommended as it uses dynamic allocation)
   void add(key_type key, const String & value) {
     add(key).set(value);

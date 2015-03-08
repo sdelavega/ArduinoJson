@@ -28,22 +28,19 @@ class JsonObject_PrintTo_Tests : public testing::Test {
 
 TEST_F(JsonObject_PrintTo_Tests, EmptyObject) { outputMustBe("{}"); }
 
-TEST_F(JsonObject_PrintTo_Tests, OneCharPtr) {
-  object["key"] = "value";
+TEST_F(JsonObject_PrintTo_Tests, TwoStrings) {
+  String value1 = "value1";
+  String value2 = "value2";
 
-  outputMustBe("{\"key\":\"value\"}");
-}
+  object["key1"] = value1;
+  object.add("key2", value2);
 
-TEST_F(JsonObject_PrintTo_Tests, OneString) {
-  String value = "value";
-  object["key"] = value;
-
-  outputMustBe("{\"key\":\"value\"}");
+  outputMustBe("{\"key1\":\"value1\",\"key2\":\"value2\"}");
 }
 
 TEST_F(JsonObject_PrintTo_Tests, TwoCharPtrs) {
   object["key1"] = "value1";
-  object["key2"] = "value2";
+  object.add("key2", "value2");
 
   outputMustBe("{\"key1\":\"value1\",\"key2\":\"value2\"}");
 }
@@ -87,14 +84,16 @@ TEST_F(JsonObject_PrintTo_Tests, OneCharPtrOverCapacity) {
   outputMustBe("{\"key1\":\"value1\",\"key2\":\"value2\"}");
 }
 
-TEST_F(JsonObject_PrintTo_Tests, OneInteger) {
-  object["key"] = 1;
-  outputMustBe("{\"key\":1}");
+TEST_F(JsonObject_PrintTo_Tests, TwoIntegers) {
+  object["a"] = 1;
+  object.add("b", 2);
+  outputMustBe("{\"a\":1,\"b\":2}");
 }
 
-TEST_F(JsonObject_PrintTo_Tests, OneDoubleFourDigits) {
-  object["key"].set(3.14159265358979323846, 4);
-  outputMustBe("{\"key\":3.1416}");
+TEST_F(JsonObject_PrintTo_Tests, TwoDoublesFourDigits) {
+  object["pi"].set(3.14159265358979323846, 4);
+  object.add("e", 2.71828182846, 4);
+  outputMustBe("{\"pi\":3.1416,\"e\":2.7183}");
 }
 
 TEST_F(JsonObject_PrintTo_Tests, OneDoubleDefaultDigits) {
