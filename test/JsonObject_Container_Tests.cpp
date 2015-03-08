@@ -94,15 +94,15 @@ TEST_F(JsonObject_Container_Tests, CanStoreCharPtrs) {
 TEST_F(JsonObject_Container_Tests, CanStoreStrings) {
   String hello = "h3110";
   String world = "w0r1d";
-  String sign  = "!!!";
+  String sign = "!!!";
 
   _object["hello"] = hello;
   _object.add("world", world);
   _object.add("!") = sign;
 
-  EXPECT_EQ(hello, _object["hello"]);
-  EXPECT_EQ(world, _object["world"]);
-  EXPECT_EQ(sign,  _object.at("!"));
+  EXPECT_EQ(hello, _object["hello"].asString());
+  EXPECT_EQ(world, _object["world"].asString());
+  EXPECT_EQ(sign, _object.at("!").asString());
 }
 
 TEST_F(JsonObject_Container_Tests, CanStoreInnerArrays) {

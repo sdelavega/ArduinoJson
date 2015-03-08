@@ -72,50 +72,34 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Adds an uninitialized JsonVariant associated with the specified key.
   // Return a reference or JsonVariant::invalid() if allocation fails.
-  JsonVariant &add(key_type key) { return (*this)[key]; }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  JsonVariant &add(const String &key) { return add(key.c_str()); }
+  template <typename TKey>
+  JsonVariant &add(const TKey& key) { return (*this)[key]; }
 
   // Adds the specified key with the specified value.
-  template <typename T>
-  void add(key_type key, T value) {
+  template <typename TKey, typename TValue>
+  void add(const TKey& key, TValue value) {
     add(key).set(value);
   }
 
   // Adds the specified double
   template <typename TKey>
-  void add(TKey key, double value, uint8_t digits) {
+  void add(const TKey& key, double value, uint8_t digits) {
     add(key).set(value, digits);
   }
 
   // Alias to use a String (not recommended as it uses dynamic allocation)
-  void add(key_type key, const String & value) {
+  template <typename TKey>
+  void add(const TKey& key, const String & value) {
     add(key).set(value);
   }
   
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  template <typename T>
-  void add(const String &key, T value) {
-    add(key.c_str(), value);
-  }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  void add(const String &key, const String & value) {
-    add(key.c_str(), value.c_str());
-  }
-
   // Adds the specified key with a reference to the specified JsonArray.
-  void add(key_type key, JsonArray &array) { add(key).set(array); }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  void add(const String &key, JsonArray &array) { add(key.c_str(), array); }
+  template <typename TKey>
+  void add(const TKey& key, JsonArray &array) { add(key).set(array); }
 
   // Adds the specified key with a reference to the specified JsonObject.
-  void add(key_type key, JsonObject &object) { add(key).set(object); }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  void add(const String &key, JsonObject &object) { add(key.c_str(), object); }
+  template <typename TKey>
+  void add(const TKey& key, JsonObject &object) { add(key).set(object); }
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
@@ -136,11 +120,9 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   }
 
   // Tells weither the specified key is present and associated with a value.
-  bool containsKey(key_type key) const { return at(key).success(); }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  bool containsKey(const String &key) const { return containsKey(key.c_str()); }
-
+  template <typename TKey>
+  bool containsKey(const TKey& key) const { return at(key).success(); }
+  
   // Removes the specified key and the associated value.
   void remove(key_type key);
 
