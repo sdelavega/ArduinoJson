@@ -86,12 +86,23 @@ TEST_F(JsonArray_Container_Tests, CanStoreBooleans) {
   secondMustEqual(false);
 }
 
-TEST_F(JsonArray_Container_Tests, CanStoreStrings) {
+TEST_F(JsonArray_Container_Tests, CanStoreCharPtrs) {
   const char* firstString = "h3110";
   const char* secondString = "w0r1d";
 
   _array.add(firstString);
   _array.add(secondString);
+
+  firstMustEqual(firstString);
+  secondMustEqual(secondString);
+}
+
+TEST_F(JsonArray_Container_Tests, CanStoreStrings) {
+  const String firstString = "h3110";
+  const String secondString = "w0r1d";
+
+  _array.add(firstString);
+  _array.add() = secondString;
 
   firstMustEqual(firstString);
   secondMustEqual(secondString);

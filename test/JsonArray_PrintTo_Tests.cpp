@@ -33,20 +33,26 @@ TEST_F(JsonArray_PrintTo_Tests, Null) {
   outputMustBe("[null]");
 }
 
-TEST_F(JsonArray_PrintTo_Tests, OneString) {
+TEST_F(JsonArray_PrintTo_Tests, OneCharPtr) {
   array.add("hello");
 
   outputMustBe("[\"hello\"]");
 }
 
-TEST_F(JsonArray_PrintTo_Tests, TwoStrings) {
+TEST_F(JsonArray_PrintTo_Tests, OneString) {
+  String value = "hello";
+  array.add(value);
+  outputMustBe("[\"hello\"]");
+}
+
+TEST_F(JsonArray_PrintTo_Tests, TwoCharPtr) {
   array.add("hello");
   array.add("world");
 
   outputMustBe("[\"hello\",\"world\"]");
 }
 
-TEST_F(JsonArray_PrintTo_Tests, OneStringOverCapacity) {
+TEST_F(JsonArray_PrintTo_Tests, OneCharPtrOverCapacity) {
   array.add("hello");
   array.add("world");
   array.add("lost");

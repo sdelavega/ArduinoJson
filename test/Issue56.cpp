@@ -21,20 +21,6 @@ TEST(Issue56, AsValueOfAnObject) {
   ASSERT_STREQ("{\"key\":\"value\"}", json);
 }
 
-TEST(Issue56, AsValueOfAnArray) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonArray& a = jsonBuffer.createArray();
-  String s = "value";
-
-  a.add(s);
-  ASSERT_STREQ("value", a[0]);
-
-  char json[128];
-  a.printTo(json, sizeof(json));
-  ASSERT_STREQ("[\"value\"]", json);
-}
-
 TEST(Issue56, UseStringAsKeyOfAnObject_Syntax1) {
   DynamicJsonBuffer jsonBuffer;
 
