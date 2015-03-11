@@ -16,47 +16,6 @@ class JsonObject_Container_Tests : public ::testing::Test {
   JsonObject& _object;
 };
 
-TEST_F(JsonObject_Container_Tests, InitialSizeIsZero) {
-  EXPECT_EQ(0, _object.size());
-}
-
-TEST_F(JsonObject_Container_Tests, Grow_WhenValuesAreAdded) {
-  _object["hello"];
-  EXPECT_EQ(1, _object.size());
-
-  _object["world"];
-  EXPECT_EQ(2, _object.size());
-}
-
-TEST_F(JsonObject_Container_Tests, DoNotGrow_WhenSameValueIsAdded) {
-  _object["hello"];
-  EXPECT_EQ(1, _object.size());
-
-  _object["hello"];
-  EXPECT_EQ(1, _object.size());
-}
-
-TEST_F(JsonObject_Container_Tests, Shrink_WhenValuesAreRemoved) {
-  _object["hello"];
-  _object["world"];
-
-  _object.remove("hello");
-  EXPECT_EQ(1, _object.size());
-
-  _object.remove("world");
-  EXPECT_EQ(0, _object.size());
-}
-
-TEST_F(JsonObject_Container_Tests,
-       DoNotShrink_WhenRemoveIsCalledWithAWrongKey) {
-  _object["hello"];
-  _object["world"];
-
-  _object.remove(":-P");
-
-  EXPECT_EQ(2, _object.size());
-}
-
 TEST_F(JsonObject_Container_Tests, CanStoreIntegers) {
   _object["hello"] = 123;
   _object["world"] = 456;
