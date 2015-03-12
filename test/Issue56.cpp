@@ -35,35 +35,6 @@ TEST(Issue56, AddStringAsKeyOfAnObject_Syntax2) {
   ASSERT_STREQ("{\"key\":\"value\"}", json);
 }
 
-TEST(Issue56, AddStringAsKeyOfAnObject_Syntax3) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonObject& o = jsonBuffer.createObject();
-  String s = "key";
-
-  o.add(s) = "value";
-  ASSERT_STREQ("value", o[s]);
-
-  char json[128];
-  o.printTo(json, sizeof(json));
-  ASSERT_STREQ("{\"key\":\"value\"}", json);
-}
-
-TEST(Issue56, AddStringAsKeyOfANestedArray_Syntax1) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonObject& o = jsonBuffer.createObject();
-  JsonArray& a = jsonBuffer.createArray();
-  String s = "key";
-
-  o.add(s, a);
-  ASSERT_EQ(&a, &o[s].asArray());
-
-  char json[128];
-  o.printTo(json, sizeof(json));
-  ASSERT_STREQ("{\"key\":[]}", json);
-}
-
 TEST(Issue56, AddStringAsKeyOfANestedArray_Syntax2) {
   DynamicJsonBuffer jsonBuffer;
 
@@ -76,21 +47,6 @@ TEST(Issue56, AddStringAsKeyOfANestedArray_Syntax2) {
   char json[128];
   o.printTo(json, sizeof(json));
   ASSERT_STREQ("{\"key\":[]}", json);
-}
-
-TEST(Issue56, AddStringAsKeyOfANestedObject_Syntax1) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonObject& o = jsonBuffer.createObject();
-  JsonObject& no = jsonBuffer.createObject();
-  String s = "key";
-
-  o.add(s, no);
-  ASSERT_EQ(&no, &o[s].asObject());
-
-  char json[128];
-  o.printTo(json, sizeof(json));
-  ASSERT_STREQ("{\"key\":{}}", json);
 }
 
 TEST(Issue56, AddStringAsKeyOfANestedObject_Syntax2) {
