@@ -7,34 +7,6 @@
 #include <gtest/gtest.h>
 #include <ArduinoJson.h>
 
-TEST(Issue56, UseStringAsKeyOfAnObject_Syntax1) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonObject& o = jsonBuffer.createObject();
-  String s = "key";
-
-  o[s] = "value";
-  ASSERT_STREQ("value", o[s]);
-
-  char json[128];
-  o.printTo(json, sizeof(json));
-  ASSERT_STREQ("{\"key\":\"value\"}", json);
-}
-
-TEST(Issue56, AddStringAsKeyOfAnObject_Syntax2) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonObject& o = jsonBuffer.createObject();
-  String s = "key";
-
-  o.add(s, "value");
-  ASSERT_STREQ("value", o.at(s));
-
-  char json[128];
-  o.printTo(json, sizeof(json));
-  ASSERT_STREQ("{\"key\":\"value\"}", json);
-}
-
 TEST(Issue56, AddStringAsKeyOfANestedArray_Syntax2) {
   DynamicJsonBuffer jsonBuffer;
 
