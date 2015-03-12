@@ -13,20 +13,41 @@ class JsonObject_Add_Tests : public ::testing::Test {
 
  protected:
   template <typename T>
-  void testWithSyntax1(const char* key, T value) {
+  void testSyntax1(const char* key, T value) {
     _object[key] = value;
     assertValueEquals<T>(key, value);
   }
 
   template <typename T>
-  void testWithSyntax2(const char* key, T value) {
+  void testSyntax2(const char* key, T value) {
     _object.add(key, value);
     assertValueEquals<T>(key, value);
   }
 
   template <typename T>
-  void testWithSyntax3(const char* key, T value) {
+  void testSyntax3(const char* key, T value) {
     _object.add(key) = value;
+    assertValueEquals<T>(key, value);
+  }
+
+  template <typename T>
+  void testSyntax4(const char* key, T value) {
+    String keyString(key);
+    _object[keyString] = value;
+    assertValueEquals<T>(key, value);
+  }
+
+  template <typename T>
+  void testSyntax5(const char* key, T value) {
+    String keyString(key);
+    _object.add(keyString, value);
+    assertValueEquals<T>(key, value);
+  }
+
+  template <typename T>
+  void testSyntax6(const char* key, T value) {
+    String keyString(key);
+    _object.add(keyString) = value;
     assertValueEquals<T>(key, value);
   }
 
@@ -57,47 +78,71 @@ void JsonObject_Add_Tests::assertValueEquals(const char* key,
 }
 
 TEST_F(JsonObject_Add_Tests, CanStoreIntegers) {
-  testWithSyntax1("tic", 123);
-  testWithSyntax2("tac", 456);
-  testWithSyntax3("toe", 789);
+  testSyntax1("one", 123);
+  testSyntax2("two", 456);
+  testSyntax3("thr", 789);
+  testSyntax4("fou", 123);
+  testSyntax5("fiv", 456);
+  testSyntax6("six", 789);
 }
 
 TEST_F(JsonObject_Add_Tests, CanStoreDoubles) {
-  testWithSyntax1("tic", 123.45);
-  testWithSyntax2("tac", 456.78);
-  testWithSyntax3("toe", 789.01);
+  testSyntax1("one", 1.2);
+  testSyntax2("two", 2.3);
+  testSyntax3("thr", 3.4);
+  testSyntax4("fou", 4.5);
+  testSyntax5("fiv", 5.6);
+  testSyntax6("six", 7.8);
 }
 
 TEST_F(JsonObject_Add_Tests, CanStoreBooleans) {
-  testWithSyntax1("tic", false);
-  testWithSyntax2("tac", true);
-  testWithSyntax3("toe", false);
+  testSyntax1("one", true);
+  testSyntax2("two", false);
+  testSyntax3("thr", true);
+  testSyntax4("fou", false);
+  testSyntax5("fiv", true);
+  testSyntax6("six", false);
 }
 
 TEST_F(JsonObject_Add_Tests, CanStoreCharPtrs) {
-  testWithSyntax1("tic", "tic");
-  testWithSyntax2("tac", "tac");
-  testWithSyntax3("toe", "toe");
+  testSyntax1("one", "one");
+  testSyntax2("two", "two");
+  testSyntax3("thr", "thr");
+  testSyntax4("fou", "fou");
+  testSyntax5("fiv", "fiv");
+  testSyntax6("six", "six");
 }
 
 TEST_F(JsonObject_Add_Tests, CanStoreStrings) {
-  String tic = "tic";
-  String tac = "tac";
-  String toe = "toe";
+  String one("one");
+  String two("two");
+  String thr("thr");
+  String fou("fou");
+  String fiv("fiv");
+  String six("six");
 
-  testWithSyntax1("tic", tic);
-  testWithSyntax2("tac", tac);
-  testWithSyntax3("toe", toe);
+  testSyntax1("one", one);
+  testSyntax2("two", two);
+  testSyntax3("thr", thr);
+  testSyntax4("fou", fou);
+  testSyntax5("fiv", fiv);
+  testSyntax6("six", six);
 }
 
-TEST_F(JsonObject_Add_Tests, CanStoreInnerArrays) {
-  testWithSyntax1<JsonArray&>("tic", createArray());
-  testWithSyntax2<JsonArray&>("tac", createArray());
-  testWithSyntax3<JsonArray&>("toe", createArray());
+TEST_F(JsonObject_Add_Tests, CanStoreNestedArrays) {
+  testSyntax1<JsonArray&>("one", createArray());
+  testSyntax2<JsonArray&>("two", createArray());
+  testSyntax3<JsonArray&>("thr", createArray());
+  testSyntax4<JsonArray&>("fou", createArray());
+  testSyntax5<JsonArray&>("fiv", createArray());
+  testSyntax6<JsonArray&>("six", createArray());
 }
 
-TEST_F(JsonObject_Add_Tests, CanStoreInnerObjects) {
-  testWithSyntax1<JsonObject&>("tic", createObject());
-  testWithSyntax2<JsonObject&>("tac", createObject());
-  testWithSyntax3<JsonObject&>("toe", createObject());
+TEST_F(JsonObject_Add_Tests, CanStoreNestedObjects) {
+  testSyntax1<JsonObject&>("one", createObject());
+  testSyntax2<JsonObject&>("two", createObject());
+  testSyntax3<JsonObject&>("thr", createObject());
+  testSyntax4<JsonObject&>("fou", createObject());
+  testSyntax5<JsonObject&>("fiv", createObject());
+  testSyntax6<JsonObject&>("six", createObject());
 }
