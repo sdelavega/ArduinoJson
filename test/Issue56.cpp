@@ -62,16 +62,3 @@ TEST(Issue56, AddStringAsKeyOfANestedObject_Syntax2) {
   o.printTo(json, sizeof(json));
   ASSERT_STREQ("{\"key\":{}}", json);
 }
-
-TEST(Issue56, RemoveKey) {
-  DynamicJsonBuffer jsonBuffer;
-
-  JsonObject& o = jsonBuffer.createObject();
-  String key = "key";
-
-  o.add("key", "value");
-  ASSERT_TRUE(o.containsKey("key"));
-
-  o.remove(key);
-  ASSERT_FALSE(o.containsKey("key"));
-}
