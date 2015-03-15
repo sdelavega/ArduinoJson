@@ -7,12 +7,14 @@
 #include <gtest/gtest.h>
 #include <ArduinoJson.h>
 
+#define null_str (static_cast<char*>(0))
+
 TEST(JsonObject_Invalid_Tests, AtFails) {
-  ASSERT_FALSE(JsonObject::invalid().at(0).success());
+  ASSERT_FALSE(JsonObject::invalid().at(null_str).success());
 }
 
 TEST(JsonObject_Invalid_Tests, SubscriptFails) {
-  ASSERT_FALSE(JsonObject::invalid()[0].success());
+  ASSERT_FALSE(JsonObject::invalid()[null_str].success());
 }
 
 TEST(JsonObject_Invalid_Tests, AddFails) {

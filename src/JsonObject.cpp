@@ -17,30 +17,26 @@ using namespace ArduinoJson::Internals;
 
 JsonObject JsonObject::_invalid(NULL);
 
-JsonVariant &JsonObject::at(const char *key) {
+JsonVariant &JsonObject::createVariantAt(const char *key) {
   node_type *node = getNodeAt(key);
-  return node ? node->content.value : JsonVariant::invalid();
-}
+  if (node) goto KEY_ALREADY_EXISTS;
 
-const JsonVariant &JsonObject::at(const char *key) const {
-  node_type *node = getNodeAt(key);
-  return node ? node->content.value : JsonVariant::invalid();
-}
+  node = createNode();
+  if (!node) goto CREATE_FAILED;
 
-JsonVariant &JsonObject::operator[](const char *key) {
-  // try to find an existing node
-  node_type *node = getNodeAt(key);
+  node->content.key = key;
+  addNode(node);
 
-  // not found => create a new one
-  if (!node) {
-    node = createNode();
-    if (!node) return JsonVariant::invalid();
-
-    node->content.key = key;
-    addNode(node);
-  }
-
+KEY_ALREADY_EXISTS:
   return node->content.value;
+
+CREATE_FAILED:
+  return JsonVariant::invalid();
+}
+
+JsonVariant &JsonObject::getVariantAt(const char *key) const {
+  node_type *node = getNodeAt(key);
+  return node ? node->content.value : JsonVariant::invalid();
 }
 
 void JsonObject::remove(char const *key) { removeNode(getNodeAt(key)); }

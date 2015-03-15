@@ -10,6 +10,7 @@
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/List.hpp"
 #include "Internals/ReferenceType.hpp"
+#include "Internals/StringCasts.hpp"
 #include "JsonPair.hpp"
 
 // Returns the size (in bytes) of an object with n elements.
@@ -42,64 +43,68 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if not found.
-  JsonVariant &at(key_type key);
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  JsonVariant &at(const String &key) { return at(key.c_str()); }
+  template <typename TKey>
+  JsonVariant &at(const TKey &key) {
+    return getVariantAt(Internals::to_cstr(key));
+  }
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant &at(key_type key) const;
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  const JsonVariant &at(const String &key) const { return at(key.c_str()); }
+  template <typename TKey>
+  const JsonVariant &at(const TKey &key) const {
+    return getVariantAt(Internals::to_cstr(key));
+  }
 
   // Gets or create the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if allocation failed.
-  JsonVariant &operator[](key_type key);
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  JsonVariant &operator[](const String &key) { return operator[](key.c_str()); }
+  template <typename TKey>
+  JsonVariant &operator[](const TKey &key) {
+    return createVariantAt(Internals::to_cstr(key));
+  }
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant &operator[](key_type key) const { return at(key); }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  const JsonVariant &operator[](const String &key) const {
-    return operator[](key.c_str());
+  template <typename TKey>
+  const JsonVariant &operator[](const TKey &key) const {
+    return getVariantAt(Internals::to_cstr(key));
   }
 
   // Adds an uninitialized JsonVariant associated with the specified key.
   // Return a reference or JsonVariant::invalid() if allocation fails.
   template <typename TKey>
-  JsonVariant &add(const TKey& key) { return (*this)[key]; }
+  JsonVariant &add(const TKey &key) {
+    return createVariantAt(Internals::to_cstr(key));
+  }
 
   // Adds the specified key with the specified value.
   template <typename TKey, typename TValue>
-  void add(const TKey& key, TValue value) {
+  void add(const TKey &key, TValue value) {
     add(key).set(value);
   }
 
   // Adds the specified double
   template <typename TKey>
-  void add(const TKey& key, double value, uint8_t digits) {
+  void add(const TKey &key, double value, uint8_t digits) {
     add(key).set(value, digits);
   }
 
   // Alias to use a String (not recommended as it uses dynamic allocation)
   template <typename TKey>
-  void add(const TKey& key, const String & value) {
+  void add(const TKey &key, const String &value) {
     add(key).set(value);
   }
-  
+
   // Adds the specified key with a reference to the specified JsonArray.
   template <typename TKey>
-  void add(const TKey& key, JsonArray &array) { add(key).set(array); }
+  void add(const TKey &key, JsonArray &array) {
+    add(key).set(array);
+  }
 
   // Adds the specified key with a reference to the specified JsonObject.
   template <typename TKey>
-  void add(const TKey& key, JsonObject &object) { add(key).set(object); }
+  void add(const TKey &key, JsonObject &object) {
+    add(key).set(object);
+  }
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
@@ -121,8 +126,10 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Tells weither the specified key is present and associated with a value.
   template <typename TKey>
-  bool containsKey(const TKey& key) const { return at(key).success(); }
-  
+  bool containsKey(const TKey &key) const {
+    return at(key).success();
+  }
+
   // Removes the specified key and the associated value.
   void remove(key_type key);
 
@@ -142,7 +149,11 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   explicit JsonObject(JsonBuffer *buffer) : Internals::List<JsonPair>(buffer) {}
 
   // Returns the list node that matches the specified key.
-  node_type *getNodeAt(key_type key) const;
+  node_type *getNodeAt(const char *key) const;
+
+  JsonVariant &createVariantAt(const char *key);
+
+  JsonVariant &getVariantAt(const char *key) const;
 
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;
