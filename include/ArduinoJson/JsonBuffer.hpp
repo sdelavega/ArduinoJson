@@ -35,13 +35,17 @@ class JsonBuffer {
   //
   // Returns a reference to the new JsonArray or JsonArray::invalid() if the
   // allocation fails.
-  JsonArray &createArray();
+  JsonArray &createArray() { return create<JsonArray>(); }
 
   // Allocates an empty JsonObject.
   //
   // Returns a reference to the new JsonObject or JsonObject::invalid() if the
   // allocation fails.
-  JsonObject &createObject();
+  JsonObject &createObject() { return create<JsonObject>(); }
+
+  // Create something
+  template <typename T>
+  T &create();
 
   // Allocates and populate a JsonArray from a JSON string.
   //

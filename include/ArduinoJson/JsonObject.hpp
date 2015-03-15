@@ -108,20 +108,16 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
-  JsonArray &createNestedArray(key_type key);
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  JsonArray &createNestedArray(const String &key) {
-    return createNestedArray(key.c_str());
+  template <typename TKey>
+  JsonArray &createNestedArray(const TKey &key) {
+    return createNested<JsonArray>(Internals::to_cstr(key));
   }
 
   // Creates and adds a JsonObject.
   // This is a shortcut for JsonBuffer::createObject() and JsonObject::add().
-  JsonObject &createNestedObject(key_type key);
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  JsonObject &createNestedObject(const String &key) {
-    return createNestedObject(key.c_str());
+  template <typename TKey>
+  JsonObject &createNestedObject(const TKey &key) {
+    return createNested<JsonObject>(Internals::to_cstr(key));
   }
 
   // Tells weither the specified key is present and associated with a value.
@@ -156,6 +152,9 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JsonVariant &getVariantAt(const char *key) const;
 
   void removeNodeAt(const char *key);
+
+  template <typename T>
+  T &createNested(const char *key);
 
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;

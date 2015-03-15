@@ -39,19 +39,16 @@ JsonVariant &JsonObject::getVariantAt(const char *key) const {
   return node ? node->content.value : JsonVariant::invalid();
 }
 
-JsonArray &JsonObject::createNestedArray(char const *key) {
-  if (!_buffer) return JsonArray::invalid();
-  JsonArray &array = _buffer->createArray();
+template <typename T>
+T &JsonObject::createNested(const char *key) {
+  if (!_buffer) return T::invalid();
+  T &array = _buffer->create<T>();
   add(key, array);
   return array;
 }
 
-JsonObject &JsonObject::createNestedObject(const char *key) {
-  if (!_buffer) return JsonObject::invalid();
-  JsonObject &object = _buffer->createObject();
-  add(key, object);
-  return object;
-}
+template JsonArray &JsonObject::createNested<JsonArray>(const char *key);
+template JsonObject &JsonObject::createNested<JsonObject>(const char *key);
 
 JsonObject::node_type *JsonObject::getNodeAt(const char *key) const {
   for (node_type *node = _firstNode; node; node = node->next) {
