@@ -147,12 +147,13 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Returns the list node that matches the specified key.
   node_type *getNodeAt(const char *key) const;
 
+  // Creates and return a variant associated with specified key.
   JsonVariant &createVariantAt(const char *key);
 
+  // Returns the variant associated with specified key.
   JsonVariant &getVariantAt(const char *key) const;
 
-  void removeNodeAt(const char *key);
-
+  // Creates and return a nested array or object associated with specified key.
   template <typename T>
   T &createNested(const char *key);
 
