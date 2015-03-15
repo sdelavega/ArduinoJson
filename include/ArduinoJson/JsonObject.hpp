@@ -131,10 +131,10 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   }
 
   // Removes the specified key and the associated value.
-  void remove(key_type key);
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  void remove(const String &key) { remove(key.c_str()); }
+  template <typename TKey>
+  void remove(const TKey &key) {
+    removeNode(getNodeAt(Internals::to_cstr(key)));
+  }
 
   // Returns a reference an invalid JsonObject.
   // This object is meant to replace a NULL pointer.
@@ -154,6 +154,8 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JsonVariant &createVariantAt(const char *key);
 
   JsonVariant &getVariantAt(const char *key) const;
+
+  void removeNodeAt(const char *key);
 
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;

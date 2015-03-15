@@ -39,8 +39,6 @@ JsonVariant &JsonObject::getVariantAt(const char *key) const {
   return node ? node->content.value : JsonVariant::invalid();
 }
 
-void JsonObject::remove(char const *key) { removeNode(getNodeAt(key)); }
-
 JsonArray &JsonObject::createNestedArray(char const *key) {
   if (!_buffer) return JsonArray::invalid();
   JsonArray &array = _buffer->createArray();
