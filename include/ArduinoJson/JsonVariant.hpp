@@ -33,97 +33,76 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   JsonVariant() : _type(Internals::JSON_UNDEFINED) {}
 
   // Initializes a JsonVariant with the specified value.
-  template <typename T>
-  explicit JsonVariant(T value) {
-    set(value);
-  }
+  explicit JsonVariant(bool x) { set(x); }
+  explicit JsonVariant(char const *x) { set(x); }
+  explicit JsonVariant(char signed x) { set(x); }
+  explicit JsonVariant(char unsigned x) { set(x); }
+  explicit JsonVariant(double x, uint8_t decimals = 2) { set(x, decimals); }
+  explicit JsonVariant(int signed x) { set(x); }
+  explicit JsonVariant(int unsigned x) { set(x); }
+  explicit JsonVariant(JsonArray &x) { set(x); }
+  explicit JsonVariant(JsonObject &x) { set(x); }
+  explicit JsonVariant(long signed x) { set(x); }
+  explicit JsonVariant(long unsigned x) { set(x); }
+  explicit JsonVariant(short signed x) { set(x); }
+  explicit JsonVariant(short unsigned x) { set(x); }
+  explicit JsonVariant(String const &x) { set(x); }
 
-  // Tells weither the variant is valid.
-  bool success() const {
-    return _type != Internals::JSON_INVALID &&
-           _type != Internals::JSON_UNDEFINED;
-  }
+  // Set the variant to the specified value.
+  void set(bool x);
+  void set(char const *x);
+  void set(char signed x) { assignLong(x); }
+  void set(char unsigned x) { assignLong(x); }
+  void set(double x, uint8_t decimals = 2);
+  void set(int signed x) { assignLong(x); }
+  void set(int unsigned x) { assignLong(x); }
+  void set(JsonArray &x);
+  void set(JsonObject &x);
+  void set(long signed x);
+  void set(long unsigned x) { assignLong(x); }
+  void set(short signed x) { assignLong(x); }
+  void set(short unsigned x) { assignLong(x); }
+  void set(String const &x) { set(x.c_str()); }
 
-  // Sets the variant to a boolean value.
-  // It will be serialized as "true" or "false" in JSON.
-  void set(bool value);
+  // Set the variant to the specified value.
+  JsonVariant &operator=(bool x) { return assignValue<bool>(x); }
+  JsonVariant &operator=(char const *x) { return assignValue<char const *>(x); }
+  JsonVariant &operator=(char signed x) { return assignValue<long>(x); }
+  JsonVariant &operator=(char unsigned x) { return assignValue<long>(x); }
+  JsonVariant &operator=(double x) { return assignValue<double>(x); }
+  JsonVariant &operator=(int signed x) { return assignValue<long>(x); }
+  JsonVariant &operator=(int unsigned x) { return assignValue<long>(x); }
+  JsonVariant &operator=(JsonArray &x) { return assignRef(x); }
+  JsonVariant &operator=(JsonObject &x) { return assignRef(x); }
+  JsonVariant &operator=(long signed x) { return assignValue<long>(x); }
+  JsonVariant &operator=(long unsigned x) { return assignValue<long>(x); }
+  JsonVariant &operator=(short signed x) { return assignValue<long>(x); }
+  JsonVariant &operator=(short unsigned x) { return assignValue<long>(x); }
+  JsonVariant &operator=(String const &x) { return assignValue(x.c_str()); }
 
-  // Sets the variant to a floating point value.
-  // The second argument specifies the number of decimal digits to write in
-  // the JSON string.
-  void set(double value, uint8_t decimals = 2);
-
-  // Sets the variant to be an integer value.
-  void set(signed long value);
-  void set(signed char value) { set(static_cast<long>(value)); }
-  void set(signed int value) { set(static_cast<long>(value)); }
-  void set(signed short value) { set(static_cast<long>(value)); }
-  void set(unsigned char value) { set(static_cast<long>(value)); }
-  void set(unsigned int value) { set(static_cast<long>(value)); }
-  void set(unsigned long value) { set(static_cast<long>(value)); }
-  void set(unsigned short value) { set(static_cast<long>(value)); }
-
-  // Sets the variant to be a string.
-  void set(const char *value);
-
-  // Sets the variant to be a string.
-  void set(const String &value) { set(value.c_str()); }
-
-  // Sets the variant to be a reference to an array.
-  void set(JsonArray &array);
-
-  // Sets the variant to be a reference to an object.
-  void set(JsonObject &object);
-
-  // Sets the variant to the specified value.
-  template <typename T>
-  JsonVariant &operator=(T value) {
-    set(value);
-    return *this;
-  }
-
-  // Sets the variant to be a reference to an array.
-  JsonVariant &operator=(JsonArray &array) {
-    set(array);
-    return *this;
-  }
-
-  // Sets the variant to be a reference to an object.
-  JsonVariant &operator=(JsonObject &object) {
-    set(object);
-    return *this;
-  }
-
-  // Alias to use a String (not recommended as it uses dynamic allocation)
-  JsonVariant &operator=(const String &str) {
-    set(str);
-    return *this;
-  }
-
-  // Gets the variant as a boolean value.
-  // Returns false if the variant is not a boolean value.
+  // Gets the variant as the specified type
   operator bool() const;
 
   // Gets the variant as a floating-point value.
   // Returns 0.0 if the variant is not a floating-point value
   operator double() const;
-  operator float() const { return static_cast<float>(as<double>()); }
+  operator float() const { return get<float, double>(); }
 
   // Gets the variant as an integer value.
   // Returns 0 if the variant is not an integer value.
-  operator signed long() const;
-  operator signed char() const { return cast_long_to<signed char>(); }
-  operator signed int() const { return cast_long_to<signed int>(); }
-  operator signed short() const { return cast_long_to<signed short>(); }
-  operator unsigned char() const { return cast_long_to<unsigned char>(); }
-  operator unsigned int() const { return cast_long_to<unsigned int>(); }
-  operator unsigned long() const { return cast_long_to<unsigned long>(); }
-  operator unsigned short() const { return cast_long_to<unsigned short>(); }
+  operator long signed() const;
+  operator signed char() const { return get<char signed, long signed>(); }
+  operator signed int() const { return get<int signed, long signed>(); }
+  operator signed short() const { return get<short signed, long signed>(); }
+  operator unsigned char() const { return get<char unsigned, long signed>(); }
+  operator unsigned int() const { return get<int unsigned, long signed>(); }
+  operator unsigned long() const { return get<long unsigned, long signed>(); }
+  operator unsigned short() const { return get<short unsigned, long signed>(); }
 
   // Gets the variant as a string.
   // Returns NULL if variant is not a string.
-  operator const char *() const;
-  const char *asString() const { return as<const char *>(); }
+  operator char const *() const;
+  char const *asString() const { return as<char const *>(); }
 
   // Gets the variant as an array.
   // Returns a reference to the JsonArray or JsonArray::invalid() if the variant
@@ -136,6 +115,17 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // variant is not an object.
   operator JsonObject &() const;
   JsonObject &asObject() const { return as<JsonObject &>(); }
+
+  // Mimics an array.
+  // Returns the element at specified index if the variant is an array.
+  // Returns JsonVariant::invalid() if the variant is not an array.
+  JsonVariant &operator[](int index);
+
+  // Mimics an object.
+  // Returns the value associated with the specified key if the variant is an
+  // object.
+  // Return JsonVariant::invalid() if the variant is not an object.
+  JsonVariant &operator[](const char *key);
 
   // Get the variant as the specified type.
   // See cast operators for details.
@@ -151,37 +141,53 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
     return false;
   }
 
-  // Returns an invalid variant.
-  // This is meant to replace a NULL pointer.
-  static JsonVariant &invalid() { return _invalid; }
-
-  // Serialize the variant to a JsonWriter
-  void writeTo(Internals::JsonWriter &writer) const;
-
   // Mimics an array or an object.
   // Returns the size of the array or object if the variant has that type.
   // Returns 0 if the variant is neither an array nor an object
   size_t size() const;
 
-  // Mimics an array.
-  // Returns the element at specified index if the variant is an array.
-  // Returns JsonVariant::invalid() if the variant is not an array.
-  JsonVariant &operator[](int index);
+  // Tells weither the variant is valid.
+  bool success() const {
+    return _type != Internals::JSON_INVALID &&
+           _type != Internals::JSON_UNDEFINED;
+  }
 
-  // Mimics an object.
-  // Returns the value associated with the specified key if the variant is an
-  // object.
-  // Return JsonVariant::invalid() if the variant is not an object.
-  JsonVariant &operator[](const char *key);
+  // Serialize the variant to a JsonWriter
+  void writeTo(Internals::JsonWriter &writer) const;
+
+  // Returns an invalid variant.
+  // This is meant to replace a NULL pointer.
+  static JsonVariant &invalid() { return _invalid; }
 
  private:
   // Special constructor used only to create _invalid.
   explicit JsonVariant(Internals::JsonVariantType type) : _type(type) {}
 
-  // Helper for interger cast operators
+  // Helper function
+  template <typename T, typename U>
+  T get() const {
+    return static_cast<T>(as<U>());
+  }
+
+  // Helper function
   template <typename T>
-  T cast_long_to() const {
-    return static_cast<T>(as<long>());
+  JsonVariant &assignLong(T value) {
+    set(static_cast<long signed>(value));
+    return *this;
+  }
+
+  // Helper function
+  template <typename T>
+  JsonVariant &assignValue(T value) {
+    set(value);
+    return *this;
+  }
+
+  // Helper function
+  template <typename T>
+  JsonVariant &assignRef(T &value) {
+    set(value);
+    return *this;
   }
 
   // The current type of the variant

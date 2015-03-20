@@ -33,7 +33,8 @@ TEST_F(JsonVariant_Storage_Tests, SChar) { testValue<signed char>(123); }
 TEST_F(JsonVariant_Storage_Tests, SInt) { testValue<signed int>(123); }
 TEST_F(JsonVariant_Storage_Tests, SLong) { testValue<signed long>(123L); }
 TEST_F(JsonVariant_Storage_Tests, SShort) { testValue<signed short>(123); }
-TEST_F(JsonVariant_Storage_Tests, String) { testValue<const char *>("hello"); }
+TEST_F(JsonVariant_Storage_Tests, CharPtr) { testValue<const char *>("hello"); }
+TEST_F(JsonVariant_Storage_Tests, String) { testValue<String>("hello"); }
 TEST_F(JsonVariant_Storage_Tests, True) { testValue<bool>(true); }
 TEST_F(JsonVariant_Storage_Tests, UChar) { testValue<unsigned char>(123); }
 TEST_F(JsonVariant_Storage_Tests, UInt) { testValue<unsigned int>(123U); }
