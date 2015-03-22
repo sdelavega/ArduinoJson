@@ -23,7 +23,7 @@ JsonObject &JsonBuffer::createObject() {
   return ptr ? *ptr : JsonObject::invalid();
 }
 
-JsonArray &JsonBuffer::parseArray(char *json, uint8_t nestingLimit) {
+JsonArray &JsonBuffer::parseArray(JsonString json, uint8_t nestingLimit) {
   JsonParser parser(this, json, nestingLimit);
   return parser.parseArray();
 }

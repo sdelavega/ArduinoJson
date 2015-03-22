@@ -9,6 +9,8 @@
 #include <stddef.h>  // for size_t
 #include <stdint.h>  // for uint8_t
 
+#include "JsonString.hpp"
+
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #elif defined(__GNUC__)
@@ -53,7 +55,7 @@ class JsonBuffer {
   //
   // Returns a reference to the new JsonObject or JsonObject::invalid() if the
   // allocation fails.
-  JsonArray &parseArray(char *json, uint8_t nestingLimit = DEFAULT_LIMIT);
+  JsonArray &parseArray(JsonString json, uint8_t nestingLimit = DEFAULT_LIMIT);
 
   // Allocates and populate a JsonObject from a JSON string.
   //
