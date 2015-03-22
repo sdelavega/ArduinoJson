@@ -13,47 +13,46 @@ class JsonObject_Add_Tests : public ::testing::Test {
 
  protected:
   template <typename T>
-  void testSyntax1(const char* key, T value) {
-    _object[key] = value;
-    assertValueEquals<T>(key, value);
+  void whenValuesAre(T a, T b, T c, T d, T e, T f) {
+    static const char* keyA = "a";
+    static const char* keyB = "b";
+    static const char* keyC = "c";
+    static const String keyD = "d";
+    static const String keyE = "e";
+    static const String keyF = "f";
+
+    _object[keyA] = a;      // syntax 1
+    _object.add(keyB, b);   // syntax 2
+    _object.add(keyC) = c;  // syntax 3
+    _object[keyD] = d;      // syntax 4
+    _object.add(keyE, e);   // syntax 5
+    _object.add(keyF) = f;  // syntax 6
+
+    assertValueEquals<T>("a", a);
+    assertValueEquals<T>("b", b);
+    assertValueEquals<T>("c", c);
+    assertValueEquals<T>("d", d);
+    assertValueEquals<T>("e", e);
+    assertValueEquals<T>("f", f);
   }
 
-  template <typename T>
-  void testSyntax2(const char* key, T value) {
-    _object.add(key, value);
-    assertValueEquals<T>(key, value);
+  JsonArray& createArray(int value) {
+    JsonArray& array = _jsonBuffer.createArray();
+    array.add(value);
+    return array;
   }
 
-  template <typename T>
-  void testSyntax3(const char* key, T value) {
-    _object.add(key) = value;
-    assertValueEquals<T>(key, value);
+  JsonObject& createObject(int value) {
+    JsonObject& object = _jsonBuffer.createObject();
+    object.add("key", value);
+    return object;
   }
 
-  template <typename T>
-  void testSyntax4(const char* key, T value) {
-    String keyString(key);
-    _object[keyString] = value;
-    assertValueEquals<T>(key, value);
+  void jsonMustBe(const char* expected) {
+    char actual[256];
+    _object.printTo(actual, sizeof(actual));
+    ASSERT_STREQ(expected, actual);
   }
-
-  template <typename T>
-  void testSyntax5(const char* key, T value) {
-    String keyString(key);
-    _object.add(keyString, value);
-    assertValueEquals<T>(key, value);
-  }
-
-  template <typename T>
-  void testSyntax6(const char* key, T value) {
-    String keyString(key);
-    _object.add(keyString) = value;
-    assertValueEquals<T>(key, value);
-  }
-
-  JsonArray& createArray() { return _jsonBuffer.createArray(); }
-
-  JsonObject& createObject() { return _jsonBuffer.createObject(); }
 
  private:
   DynamicJsonBuffer _jsonBuffer;
@@ -78,89 +77,72 @@ void JsonObject_Add_Tests::assertValueEquals(const char* key,
 }
 
 TEST_F(JsonObject_Add_Tests, AddBooleans) {
-  testSyntax1("one", true);
-  testSyntax2("two", false);
-  testSyntax3("thr", true);
-  testSyntax4("fou", false);
-  testSyntax5("fiv", true);
-  testSyntax6("six", false);
+  whenValuesAre(true, false, true, false, true, false);
+  jsonMustBe(
+      "{\"a\":true,\"b\":false,\"c\":true,"
+      "\"d\":false,\"e\":true,\"f\":false}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddCharPtrs) {
-  testSyntax1("one", "one");
-  testSyntax2("two", "two");
-  testSyntax3("thr", "thr");
-  testSyntax4("fou", "fou");
-  testSyntax5("fiv", "fiv");
-  testSyntax6("six", "six");
+  whenValuesAre("a", "b", "c", "d", "e", "f");
+  jsonMustBe(
+      "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\","
+      "\"d\":\"d\",\"e\":\"e\",\"f\":\"f\"}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddDoubles) {
-  testSyntax1("one", 1.2);
-  testSyntax2("two", 2.3);
-  testSyntax3("thr", 3.4);
-  testSyntax4("fou", 4.5);
-  testSyntax5("fiv", 5.6);
-  testSyntax6("six", 7.8);
+  whenValuesAre(1.11, 2.22, 3.33, 4.44, 5.55, 6.66);
+  jsonMustBe(
+      "{\"a\":1.11,\"b\":2.22,\"c\":3.33,"
+      "\"d\":4.44,\"e\":5.55,\"f\":6.66}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddFloats) {
-  testSyntax1("one", 1.2f);
-  testSyntax2("two", 2.3f);
-  testSyntax3("thr", 3.4f);
-  testSyntax4("fou", 4.5f);
-  testSyntax5("fiv", 5.6f);
-  testSyntax6("six", 7.8f);
+  whenValuesAre(1.11f, 2.22f, 3.33f, 4.44f, 5.55f, 6.66f);
+  jsonMustBe(
+      "{\"a\":1.11,\"b\":2.22,\"c\":3.33,"
+      "\"d\":4.44,\"e\":5.55,\"f\":6.66}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddIntegers) {
-  testSyntax1("one", 123);
-  testSyntax2("two", 456);
-  testSyntax3("thr", 789);
-  testSyntax4("fou", 123);
-  testSyntax5("fiv", 456);
-  testSyntax6("six", 789);
+  whenValuesAre(111, 222, 333, 444, 555, 666);
+  jsonMustBe(
+      "{\"a\":111,\"b\":222,\"c\":333,"
+      "\"d\":444,\"e\":555,\"f\":666}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddLongs) {
-  testSyntax1("one", 123L);
-  testSyntax2("two", 456L);
-  testSyntax3("thr", 789L);
-  testSyntax4("fou", 123L);
-  testSyntax5("fiv", 456L);
-  testSyntax6("six", 789L);
+  whenValuesAre(111L, 222L, 333L, 444L, 555L, 666L);
+  jsonMustBe(
+      "{\"a\":111,\"b\":222,\"c\":333,"
+      "\"d\":444,\"e\":555,\"f\":666}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddNestedArrays) {
-  testSyntax1<JsonArray&>("one", createArray());
-  testSyntax2<JsonArray&>("two", createArray());
-  testSyntax3<JsonArray&>("thr", createArray());
-  testSyntax4<JsonArray&>("fou", createArray());
-  testSyntax5<JsonArray&>("fiv", createArray());
-  testSyntax6<JsonArray&>("six", createArray());
+  whenValuesAre<JsonArray&>(createArray(1), createArray(2), createArray(3),
+                            createArray(4), createArray(5), createArray(6));
+  jsonMustBe(
+      "{\"a\":[1],\"b\":[2],\"c\":[3],"
+      "\"d\":[4],\"e\":[5],\"f\":[6]}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddNestedObjects) {
-  testSyntax1<JsonObject&>("one", createObject());
-  testSyntax2<JsonObject&>("two", createObject());
-  testSyntax3<JsonObject&>("thr", createObject());
-  testSyntax4<JsonObject&>("fou", createObject());
-  testSyntax5<JsonObject&>("fiv", createObject());
-  testSyntax6<JsonObject&>("six", createObject());
+  whenValuesAre<JsonObject&>(createObject(1), createObject(2), createObject(3),
+                             createObject(4), createObject(5), createObject(6));
+  jsonMustBe(
+      "{\"a\":{\"key\":1},\"b\":{\"key\":2},\"c\":{\"key\":3},"
+      "\"d\":{\"key\":4},\"e\":{\"key\":5},\"f\":{\"key\":6}}");
 }
 
 TEST_F(JsonObject_Add_Tests, AddStrings) {
-  String one("one");
-  String two("two");
-  String thr("thr");
-  String fou("fou");
-  String fiv("fiv");
-  String six("six");
-
-  testSyntax1("one", one);
-  testSyntax2("two", two);
-  testSyntax3("thr", thr);
-  testSyntax4("fou", fou);
-  testSyntax5("fiv", fiv);
-  testSyntax6("six", six);
+  String a("a");
+  String b("b");
+  String c("c");
+  String d("d");
+  String e("e");
+  String f("f");
+  whenValuesAre(a, b, c, d, e, f);
+  jsonMustBe(
+      "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\","
+      "\"d\":\"d\",\"e\":\"e\",\"f\":\"f\"}");
 }
