@@ -10,11 +10,11 @@
 
 namespace ArduinoJson {
 
-class JsonString {
+class JsonInput {
  public:
-  JsonString(char* data) : _data(data) {}
+  JsonInput(char* data) : _data(data) {}
 
-  JsonString(String& s) : _data(const_cast<char*>(s.c_str())) {}
+  JsonInput(String& s) : _data(const_cast<char*>(s.c_str())) {}
 
   operator char*() { return _data; }
 

@@ -13,3 +13,10 @@ TEST(ArduinoStringTests, JsonBuffer_ParseArray) {
   JsonArray &array = jsonBuffer.parseArray(json);
   ASSERT_TRUE(array.success());
 }
+
+TEST(ArduinoStringTests, JsonBuffer_ParseObject) {
+  DynamicJsonBuffer jsonBuffer;
+  String json("{\"a\":1,\"b\":2}");
+  JsonObject &object = jsonBuffer.parseObject(json);
+  ASSERT_TRUE(object.success());
+}
