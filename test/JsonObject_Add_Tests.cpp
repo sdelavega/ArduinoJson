@@ -76,6 +76,11 @@ void JsonObject_Add_Tests::assertValueEquals(const char* key,
   EXPECT_EQ(&value, &_object[key].asObject());
 }
 
+template <>
+void JsonObject_Add_Tests::assertValueEquals(const char* key, String& value) {
+  EXPECT_STREQ(value.c_str(), _object[key].asString());
+}
+
 TEST_F(JsonObject_Add_Tests, AddBooleans) {
   whenValuesAre(true, false, true, false, true, false);
   jsonMustBe(
@@ -141,7 +146,7 @@ TEST_F(JsonObject_Add_Tests, AddStrings) {
   String d("d");
   String e("e");
   String f("f");
-  whenValuesAre(a, b, c, d, e, f);
+  whenValuesAre<String&>(a, b, c, d, e, f);
   jsonMustBe(
       "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\","
       "\"d\":\"d\",\"e\":\"e\",\"f\":\"f\"}");
