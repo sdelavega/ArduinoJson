@@ -9,6 +9,8 @@
 #include <stddef.h>  // for size_t
 #include <stdint.h>  // for uint8_t
 
+#include "Arduino/String.hpp"
+
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #elif defined(__GNUC__)
@@ -59,17 +61,30 @@ class JsonBuffer {
   // allocation fails.
   JsonArray &parseArray(char *json, uint8_t nestingLimit = DEFAULT_LIMIT);
 
+  // Alias with a String (not recommended as String uses dynamic allocation)
+  JsonArray &parseArray(String &json, uint8_t nestingLimit = DEFAULT_LIMIT) {
+    return parseArray(const_cast<char *>(json.c_str()), nestingLimit);
+  }
+
   // Allocates and populate a JsonObject from a JSON string.
   //
   // The First argument is a pointer to the JSON string, the memory must be
   // writable
-  // because the parser will insert null-terminators and replace escaped chars.
+  // because the parser will insert null-terminators and replace escaped
+  // chars.
   //
-  // The second argument set the nesting limit (see comment on DEFAULT_LIMIT)
+  // The second argument set the nesting limit (see comment on
+  // DEFAULT_LIMIT)
   //
-  // Returns a reference to the new JsonObject or JsonObject::invalid() if the
+  // Returns a reference to the new JsonObject or JsonObject::invalid() if
+  // the
   // allocation fails.
   JsonObject &parseObject(char *json, uint8_t nestingLimit = DEFAULT_LIMIT);
+
+  // Alias with a String (not recommended as String uses dynamic allocation)
+  JsonObject &parseObject(String &json, uint8_t nestingLimit = DEFAULT_LIMIT) {
+    return parseObject(const_cast<char *>(json.c_str()), nestingLimit);
+  }
 
   // Allocates n bytes in the JsonBuffer.
   // Return a pointer to the allocated memory or NULL if allocation fails.

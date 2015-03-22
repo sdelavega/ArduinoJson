@@ -34,3 +34,17 @@ TEST(Issue56, AddStringAsKeyOfANestedObject_Syntax2) {
   o.printTo(json, sizeof(json));
   ASSERT_STREQ("{\"key\":{}}", json);
 }
+
+TEST(Issue56, JsonBuffer_ParseObject) {
+  DynamicJsonBuffer jsonBuffer;
+  String json("{\"key\":\"value\"}");
+  JsonObject& object = jsonBuffer.parseObject(json);
+  ASSERT_TRUE(object.success());
+}
+
+TEST(Issue56, JsonBuffer_ParseArray) {
+  DynamicJsonBuffer jsonBuffer;
+  String json("[1,2]");
+  JsonArray& array = jsonBuffer.parseArray(json);
+  ASSERT_TRUE(array.success());
+}
