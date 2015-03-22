@@ -13,6 +13,7 @@
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
+#include "Internals/StringCasts.hpp"
 
 namespace ArduinoJson {
 
@@ -125,7 +126,10 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // Returns the value associated with the specified key if the variant is an
   // object.
   // Return JsonVariant::invalid() if the variant is not an object.
-  JsonVariant &operator[](const char *key);
+  template <typename TKey>
+  JsonVariant &operator[](const TKey &key) {
+    return getVariantAt(Internals::to_cstr(key));
+  }
 
   // Get the variant as the specified type.
   // See cast operators for details.
@@ -189,6 +193,8 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
     set(value);
     return *this;
   }
+
+  JsonVariant &getVariantAt(char const *key);
 
   // The current type of the variant
   Internals::JsonVariantType _type;

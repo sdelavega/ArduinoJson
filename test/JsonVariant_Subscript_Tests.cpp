@@ -9,6 +9,19 @@
 
 class JsonVariant_Subscript_Tests : public ::testing::Test {
  protected:
+  void sizeMustBe(int expected) { EXPECT_EQ(expected, _variant.size()); }
+
+  template <typename T>
+  void subscriptMustFail(T key) {
+    EXPECT_FALSE(_variant[key].success());
+  }
+
+  template <typename T>
+  void subscriptMustMatch(T key, char const *expected) {
+    EXPECT_STREQ(expected, _variant[key].asString());
+  }
+
+ protected:
   DynamicJsonBuffer _jsonBuffer;
   JsonVariant _variant;
 };
@@ -20,12 +33,13 @@ TEST_F(JsonVariant_Subscript_Tests, Array) {
 
   _variant = array;
 
-  EXPECT_EQ(2, _variant.size());
-  EXPECT_STREQ("element at index 0", _variant[0].asString());
-  EXPECT_STREQ("element at index 1", _variant[1].asString());
-  EXPECT_FALSE(_variant[-1].success());
-  EXPECT_FALSE(_variant[3].success());
-  EXPECT_FALSE(_variant["0"].success());
+  sizeMustBe(2);
+  subscriptMustMatch(0, "element at index 0");
+  subscriptMustMatch(1, "element at index 1");
+  subscriptMustFail(-1);
+  subscriptMustFail(3);
+  subscriptMustFail("0");
+  subscriptMustFail(String("0"));
 }
 
 TEST_F(JsonVariant_Subscript_Tests, Object) {
@@ -35,30 +49,34 @@ TEST_F(JsonVariant_Subscript_Tests, Object) {
 
   _variant = object;
 
-  EXPECT_EQ(2, _variant.size());
-  EXPECT_STREQ("element at key \"a\"", _variant["a"].asString());
-  EXPECT_STREQ("element at key \"b\"", _variant["b"].asString());
-  EXPECT_FALSE(_variant["c"].success());
-  EXPECT_FALSE(_variant[0].success());
+  sizeMustBe(2);
+  subscriptMustMatch("a", "element at key \"a\"");
+  subscriptMustMatch("b", "element at key \"b\"");
+  subscriptMustFail("c");
+  subscriptMustFail(String("c"));
+  subscriptMustFail(0);
 }
 
 TEST_F(JsonVariant_Subscript_Tests, Undefined) {
   _variant = JsonVariant();
-  EXPECT_EQ(0, _variant.size());
-  EXPECT_FALSE(_variant["0"].success());
-  EXPECT_FALSE(_variant[0].success());
+  sizeMustBe(0);
+  subscriptMustFail("0");
+  subscriptMustFail(String("0"));
+  subscriptMustFail(0);
 }
 
 TEST_F(JsonVariant_Subscript_Tests, Invalid) {
   _variant = JsonVariant::invalid();
-  EXPECT_EQ(0, _variant.size());
-  EXPECT_FALSE(_variant["0"].success());
-  EXPECT_FALSE(_variant[0].success());
+  sizeMustBe(0);
+  subscriptMustFail("0");
+  subscriptMustFail(String("0"));
+  subscriptMustFail(0);
 }
 
 TEST_F(JsonVariant_Subscript_Tests, String) {
   _variant = "hello world";
-  EXPECT_EQ(0, _variant.size());
-  EXPECT_FALSE(_variant["0"].success());
-  EXPECT_FALSE(_variant[0].success());
+  sizeMustBe(0);
+  subscriptMustFail("0");
+  subscriptMustFail(String("0"));
+  subscriptMustFail(0);
 }
