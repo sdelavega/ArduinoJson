@@ -12,6 +12,7 @@
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
+#include "JsonString.hpp"
 
 namespace ArduinoJson {
 
@@ -63,7 +64,7 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   void set(unsigned short value) { set(static_cast<long>(value)); }
 
   // Sets the variant to be a string.
-  void set(const char *value);
+  void set(JsonString value);
 
   // Sets the variant to be a reference to an array.
   void set(JsonArray &array);

@@ -20,3 +20,9 @@ TEST(ArduinoStringTests, JsonBuffer_ParseObject) {
   JsonObject &object = jsonBuffer.parseObject(json);
   ASSERT_TRUE(object.success());
 }
+
+TEST(ArduinoStringTests, JsonVariant_ConstructorExplicit) {
+  String s = "Hello world!";
+  JsonVariant variant(s);
+  ASSERT_STREQ("Hello world!", variant.asString());
+}

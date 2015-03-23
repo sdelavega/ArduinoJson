@@ -44,7 +44,7 @@ void JsonVariant::set(bool value) {
   _content.asBoolean = value;
 }
 
-void JsonVariant::set(const char *value) {
+void JsonVariant::set(JsonString value) {
   if (_type == JSON_INVALID) return;
   _type = JSON_STRING;
   _content.asString = value;
