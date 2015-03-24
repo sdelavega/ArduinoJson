@@ -12,7 +12,7 @@
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
-#include "JsonString.hpp"
+#include "JsonCasts.hpp"
 
 namespace ArduinoJson {
 
@@ -52,19 +52,13 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // The second argument specifies the number of decimal digits to write in
   // the JSON string.
   void set(double value, uint8_t decimals = 2);
+  void set(float value, uint8_t decimals = 2) { set(value, decimals); }
 
   // Sets the variant to be an integer value.
-  void set(signed long value);
-  void set(signed char value) { set(static_cast<long>(value)); }
-  void set(signed int value) { set(static_cast<long>(value)); }
-  void set(signed short value) { set(static_cast<long>(value)); }
-  void set(unsigned char value) { set(static_cast<long>(value)); }
-  void set(unsigned int value) { set(static_cast<long>(value)); }
-  void set(unsigned long value) { set(static_cast<long>(value)); }
-  void set(unsigned short value) { set(static_cast<long>(value)); }
+  void set(long value);
 
   // Sets the variant to be a string.
-  void set(JsonString value);
+  void set(const char *value);
 
   // Sets the variant to be a reference to an array.
   void set(JsonArray &array);
@@ -72,10 +66,16 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // Sets the variant to be a reference to an object.
   void set(JsonObject &object);
 
+  // Generalized version that accepts a generic type of string.
+  template <typename T>
+  void set(T &value) {
+    set(to_value(value));
+  }
+
   // Sets the variant to the specified value.
   template <typename T>
-  JsonVariant &operator=(T value) {
-    set(value);
+  JsonVariant &operator=(T &value) {
+    set(to_value(value));
     return *this;
   }
 

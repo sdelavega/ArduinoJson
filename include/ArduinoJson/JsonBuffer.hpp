@@ -9,7 +9,7 @@
 #include <stddef.h>  // for size_t
 #include <stdint.h>  // for uint8_t
 
-#include "JsonInput.hpp"
+#include "JsonCasts.hpp"
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
@@ -55,7 +55,13 @@ class JsonBuffer {
   //
   // Returns a reference to the new JsonObject or JsonObject::invalid() if the
   // allocation fails.
-  JsonArray &parseArray(JsonInput json, uint8_t nestingLimit = DEFAULT_LIMIT);
+  JsonArray &parseArray(char *json, uint8_t nestingLimit = DEFAULT_LIMIT);
+
+  // Generalized version that accepts a generic type of string.
+  template <typename T>
+  JsonArray &parseArray(T &json, uint8_t nesting = DEFAULT_LIMIT) {
+    return parseArray(to_str(json), nesting);
+  }
 
   // Allocates and populate a JsonObject from a JSON string.
   //
@@ -67,7 +73,13 @@ class JsonBuffer {
   //
   // Returns a reference to the new JsonObject or JsonObject::invalid() if the
   // allocation fails.
-  JsonObject &parseObject(JsonInput json, uint8_t nestingLimit = DEFAULT_LIMIT);
+  JsonObject &parseObject(char *json, uint8_t nestingLimit = DEFAULT_LIMIT);
+
+  // Generalized version that accepts a generic type of string.
+  template <typename T>
+  JsonObject &parseObject(T &json, uint8_t nestingLimit = DEFAULT_LIMIT) {
+    return parseObject(to_str(json), nestingLimit);
+  }
 
   // Allocates n bytes in the JsonBuffer.
   // Return a pointer to the allocated memory or NULL if allocation fails.
