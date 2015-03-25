@@ -23,6 +23,21 @@ union JsonVariantContent {
   const char* asString;  // asString can be null
   JsonArray* asArray;    // asArray cannot be null
   JsonObject* asObject;  // asObject cannot be null
+
+  JsonVariantContent() {}
+  JsonVariantContent(bool value) : asBoolean(value) {}
+  JsonVariantContent(double value) : asDouble(value) {}
+  JsonVariantContent(signed char value) : asLong(value) {}
+  JsonVariantContent(signed int value) : asLong(value) {}
+  JsonVariantContent(signed long value) : asLong(value) {}
+  JsonVariantContent(signed short value) : asLong(value) {}
+  JsonVariantContent(unsigned char value) : asLong(value) {}
+  JsonVariantContent(unsigned int value) : asLong(value) {}
+  JsonVariantContent(unsigned long value) : asLong(value) {}
+  JsonVariantContent(unsigned short value) : asLong(value) {}
+  JsonVariantContent(const char* value) : asString(value) {}
+  JsonVariantContent(JsonArray* value) : asArray(value) {}
+  JsonVariantContent(JsonObject* value) : asObject(value) {}
 };
 }
 }

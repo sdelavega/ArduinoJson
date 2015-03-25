@@ -61,16 +61,12 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JsonVariant &add(key_type key) { return (*this)[key]; }
 
   // Adds the specified key with the specified value.
-  template <typename T>
-  void add(key_type key, T value) {
-    add(key).set(value);
+  void add(key_type key, const JsonVariant &value) { add(key) = value; }
+
+  // Adds the specified key with the specified value.
+  void add(key_type key, double value, uint8_t digits) {
+    add(key) = JsonVariant(value, digits);
   }
-
-  // Adds the specified key with a reference to the specified JsonArray.
-  void add(key_type key, JsonArray &array) { add(key).set(array); }
-
-  // Adds the specified key with a reference to the specified JsonObject.
-  void add(key_type key, JsonObject &object) { add(key).set(object); }
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().

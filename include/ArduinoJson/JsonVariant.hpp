@@ -31,11 +31,54 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // Creates an uninitialized JsonVariant
   JsonVariant() : _type(Internals::JSON_UNDEFINED) {}
 
-  // Initializes a JsonVariant with the specified value.
-  template <typename T>
-  explicit JsonVariant(T value) {
-    set(value);
-  }
+  // Create a JsonVariant containing a boolean value.
+  // It will be serialized as "true" or "false" in JSON.
+  JsonVariant(bool value) : _type(Internals::JSON_BOOLEAN), _content(value) {}
+
+  // Create a JsonVariant containing a floating point value.
+  // The second argument specifies the number of decimal digits to write in
+  // the JSON string.
+  JsonVariant(double value, uint8_t decimals = 2)
+      : _type(static_cast<Internals::JsonVariantType>(
+            Internals::JSON_DOUBLE_0_DECIMALS + decimals)),
+        _content(value) {}
+
+  // Create a JsonVariant containing an integer value.
+  JsonVariant(signed char value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(signed long value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(signed int value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(signed short value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(unsigned char value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(unsigned long value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(unsigned int value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  JsonVariant(unsigned short value)
+      : _type(Internals::JSON_LONG), _content(value) {}
+
+  // Create a JsonVariant containing a string.
+  JsonVariant(const char *value)
+      : _type(Internals::JSON_STRING), _content(value) {}
+
+  // Create a JsonVariant containing a reference to an array.
+  JsonVariant(JsonArray &array)
+      : _type(Internals::JSON_ARRAY), _content(&array) {}
+
+  // Create a JsonVariant containing a reference to an object.
+  JsonVariant(JsonObject &object)
+      : _type(Internals::JSON_OBJECT), _content(&object) {}
 
   // Tells weither the variant is valid.
   bool success() const {
@@ -43,50 +86,12 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
            _type != Internals::JSON_UNDEFINED;
   }
 
-  // Sets the variant to a boolean value.
-  // It will be serialized as "true" or "false" in JSON.
-  void set(bool value);
-
-  // Sets the variant to a floating point value.
-  // The second argument specifies the number of decimal digits to write in
-  // the JSON string.
-  void set(double value, uint8_t decimals = 2);
-
-  // Sets the variant to be an integer value.
-  void set(signed long value);
-  void set(signed char value) { set(static_cast<long>(value)); }
-  void set(signed int value) { set(static_cast<long>(value)); }
-  void set(signed short value) { set(static_cast<long>(value)); }
-  void set(unsigned char value) { set(static_cast<long>(value)); }
-  void set(unsigned int value) { set(static_cast<long>(value)); }
-  void set(unsigned long value) { set(static_cast<long>(value)); }
-  void set(unsigned short value) { set(static_cast<long>(value)); }
-
-  // Sets the variant to be a string.
-  void set(const char *value);
-
-  // Sets the variant to be a reference to an array.
-  void set(JsonArray &array);
-
-  // Sets the variant to be a reference to an object.
-  void set(JsonObject &object);
-
-  // Sets the variant to the specified value.
-  template <typename T>
-  JsonVariant &operator=(T value) {
-    set(value);
-    return *this;
-  }
-
-  // Sets the variant to be a reference to an array.
-  JsonVariant &operator=(JsonArray &array) {
-    set(array);
-    return *this;
-  }
-
-  // Sets the variant to be a reference to an object.
-  JsonVariant &operator=(JsonObject &object) {
-    set(object);
+  // Create a JsonVariant containing the specified value.
+  JsonVariant &operator=(const JsonVariant &other) {
+    if (_type != Internals::JSON_INVALID) {
+      _type = other._type;
+      _content = other._content;
+    }
     return *this;
   }
 

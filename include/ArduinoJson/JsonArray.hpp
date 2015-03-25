@@ -48,20 +48,13 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   JsonVariant &add();
 
   // Adds the specified value at the end of the array.
-  template <typename T>
-  void add(T value) {
-    add().set(value);
-  }
+  void add(const JsonVariant &value) { add() = value; }
 
   // Adds the specified double value at the end of the array.
   // The value will be printed with the specified number of decimal digits.
-  void add(double value, uint8_t decimals) { add().set(value, decimals); }
-
-  // Adds a reference to the specified JsonArray at the end of the array.
-  void add(JsonArray &array) { add().set(array); }
-
-  // Adds a reference to the specified JsonObject at the end of the array.
-  void add(JsonObject &obejct) { add().set(obejct); }
+  void add(double value, uint8_t decimals) {
+    add() = JsonVariant(value, decimals);
+  }
 
   // Creates a JsonArray and adds a reference at the end of the array.
   // It's a shortcut for JsonBuffer::createArray() and JsonArray::add()
