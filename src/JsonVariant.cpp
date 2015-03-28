@@ -14,28 +14,14 @@ using namespace ArduinoJson::Internals;
 
 JsonVariant JsonVariant::_invalid(JSON_INVALID);
 
-JsonVariant::operator JsonArray &() const {
-  return _type == JSON_ARRAY ? *_content.asArray : JsonArray::invalid();
+JsonArray &JsonVariant::asArray() const {
+  return _type == Internals::JSON_ARRAY ? *_content.asArray
+                                        : JsonArray::invalid();
 }
 
-JsonVariant::operator JsonObject &() const {
-  return _type == JSON_OBJECT ? *_content.asObject : JsonObject::invalid();
-}
-
-JsonVariant::operator bool() const {
-  return _type == JSON_BOOLEAN ? _content.asBoolean : false;
-}
-
-JsonVariant::operator const char *() const {
-  return _type == JSON_STRING ? _content.asString : NULL;
-}
-
-JsonVariant::operator double() const {
-  return _type >= JSON_DOUBLE_0_DECIMALS ? _content.asDouble : 0;
-}
-
-JsonVariant::operator long() const {
-  return _type == JSON_LONG ? _content.asLong : 0;
+JsonObject &JsonVariant::asObject() const {
+  return _type == Internals::JSON_OBJECT ? *_content.asObject
+                                         : JsonObject::invalid();
 }
 
 size_t JsonVariant::size() const {
