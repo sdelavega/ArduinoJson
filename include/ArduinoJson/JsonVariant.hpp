@@ -33,52 +33,78 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
 
   // Create a JsonVariant containing a boolean value.
   // It will be serialized as "true" or "false" in JSON.
-  JsonVariant(bool value) : _type(Internals::JSON_BOOLEAN), _content(value) {}
+  JsonVariant(bool value) {
+    _type = Internals::JSON_BOOLEAN;
+    _content.asBoolean = value;
+  }
 
   // Create a JsonVariant containing a floating point value.
   // The second argument specifies the number of decimal digits to write in
   // the JSON string.
-  JsonVariant(double value, uint8_t decimals = 2)
-      : _type(static_cast<Internals::JsonVariantType>(
-            Internals::JSON_DOUBLE_0_DECIMALS + decimals)),
-        _content(value) {}
+  JsonVariant(double value, uint8_t decimals = 2) {
+    _type = static_cast<Internals::JsonVariantType>(
+        Internals::JSON_DOUBLE_0_DECIMALS + decimals);
+    _content.asDouble = value;
+  }
 
   // Create a JsonVariant containing an integer value.
-  JsonVariant(signed char value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(signed char value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(signed long value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(signed long value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(signed int value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(signed int value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(signed short value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(signed short value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(unsigned char value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(unsigned char value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(unsigned long value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(unsigned long value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(unsigned int value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(unsigned int value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
-  JsonVariant(unsigned short value)
-      : _type(Internals::JSON_LONG), _content(value) {}
+  JsonVariant(unsigned short value) {
+    _type = Internals::JSON_LONG;
+    _content.asLong = value;
+  }
 
   // Create a JsonVariant containing a string.
-  JsonVariant(const char *value)
-      : _type(Internals::JSON_STRING), _content(value) {}
+  JsonVariant(const char *value) {
+    _type = Internals::JSON_STRING;
+    _content.asString = value;
+  }
 
   // Create a JsonVariant containing a reference to an array.
-  JsonVariant(JsonArray &array)
-      : _type(Internals::JSON_ARRAY), _content(&array) {}
+  JsonVariant(JsonArray &array) {
+    _type = Internals::JSON_ARRAY;
+    _content.asArray = &array;
+  }
 
   // Create a JsonVariant containing a reference to an object.
-  JsonVariant(JsonObject &object)
-      : _type(Internals::JSON_OBJECT), _content(&object) {}
+  JsonVariant(JsonObject &object) {
+    _type = Internals::JSON_OBJECT;
+    _content.asObject = &object;
+  }
 
   // Tells weither the variant is valid.
   bool success() const {
@@ -121,7 +147,8 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   const char *asString() const { return as<const char *>(); }
 
   // Gets the variant as an array.
-  // Returns a reference to the JsonArray or JsonArray::invalid() if the variant
+  // Returns a reference to the JsonArray or JsonArray::invalid() if the
+  // variant
   // is not an array.
   operator JsonArray &() const;
   JsonArray &asArray() const { return as<JsonArray &>(); }
@@ -164,7 +191,8 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   JsonVariant &operator[](int index);
 
   // Mimics an object.
-  // Returns the value associated with the specified key if the variant is an
+  // Returns the value associated with the specified key if the variant is
+  // an
   // object.
   // Return JsonVariant::invalid() if the variant is not an object.
   JsonVariant &operator[](const char *key);
