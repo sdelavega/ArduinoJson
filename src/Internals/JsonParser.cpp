@@ -97,9 +97,10 @@ JsonArray &JsonParser::parseArray() {
   // Read each value
   for (;;) {
     // 1 - Parse value
-    JsonVariant &value = array.add();
+    JsonVariant value;
     parseAnythingTo(value);
     if (!value.success()) goto ERROR_INVALID_VALUE;
+    array.add(value);
 
     // 2 - More values?
     if (skip(']')) goto SUCCES_NON_EMPTY_ARRAY;

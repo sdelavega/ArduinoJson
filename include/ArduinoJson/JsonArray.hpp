@@ -43,17 +43,13 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   // Returns the JsonVariant at the specified index (synonym for at())
   JsonVariant &operator[](int index) const { return at(index); }
 
-  // Adds an uninitialized JsonVariant at the end of the array.
-  // Return a reference or JsonVariant::invalid() if allocation fails.
-  JsonVariant &add();
-
   // Adds the specified value at the end of the array.
-  void add(const JsonVariant &value) { add() = value; }
+  void add(const JsonVariant &value);
 
   // Adds the specified double value at the end of the array.
   // The value will be printed with the specified number of decimal digits.
   void add(double value, uint8_t decimals) {
-    add() = JsonVariant(value, decimals);
+    add(JsonVariant(value, decimals));
   }
 
   // Creates a JsonArray and adds a reference at the end of the array.

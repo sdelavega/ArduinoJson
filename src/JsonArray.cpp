@@ -20,13 +20,12 @@ JsonVariant &JsonArray::at(int index) const {
   return node ? node->content : JsonVariant::invalid();
 }
 
-JsonVariant &JsonArray::add() {
+void JsonArray::add(const JsonVariant &value) {
   node_type *node = createNode();
-  if (!node) return JsonVariant::invalid();
-
-  addNode(node);
-
-  return node->content;
+  if (node) {
+    addNode(node);
+    node->content = value;
+  }
 }
 
 JsonArray &JsonArray::createNestedArray() {
