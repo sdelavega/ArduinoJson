@@ -149,7 +149,7 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // an
   // object.
   // Return JsonVariant::invalid() if the variant is not an object.
-  JsonVariant &operator[](const char *key);
+  JsonVariant operator[](const char *key);
 
  private:
   // Special constructor used only to create _invalid.

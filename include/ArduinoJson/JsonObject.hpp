@@ -22,6 +22,7 @@ namespace ArduinoJson {
 // Forward declarations
 class JsonArray;
 class JsonBuffer;
+class JsonObjectElement;
 
 // A dictionary of JsonVariant indexed by string (char*)
 //
@@ -50,7 +51,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Gets or create the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if allocation failed.
-  JsonVariant &operator[](key_type key);
+  JsonObjectElement operator[](key_type key);
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
@@ -58,7 +59,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Adds an uninitialized JsonVariant associated with the specified key.
   // Return a reference or JsonVariant::invalid() if allocation fails.
-  JsonVariant &add(key_type key) { return (*this)[key]; }
+  JsonVariant &add(key_type key);
 
   // Adds the specified key with the specified value.
   void add(key_type key, const JsonVariant &value) { add(key) = value; }
@@ -100,4 +101,13 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;
 };
+}
+
+#include "JsonObjectElement.hpp"
+
+namespace ArduinoJson {
+
+inline JsonObjectElement JsonObject::operator[](key_type key) {
+  return JsonObjectElement(*this, key);
+}
 }

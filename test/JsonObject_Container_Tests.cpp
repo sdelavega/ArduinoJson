@@ -21,24 +21,24 @@ TEST_F(JsonObject_Container_Tests, InitialSizeIsZero) {
 }
 
 TEST_F(JsonObject_Container_Tests, Grow_WhenValuesAreAdded) {
-  _object["hello"];
+  _object["hello"] = 1;
   EXPECT_EQ(1, _object.size());
 
-  _object["world"];
+  _object.add("world", 2);
   EXPECT_EQ(2, _object.size());
 }
 
 TEST_F(JsonObject_Container_Tests, DoNotGrow_WhenSameValueIsAdded) {
-  _object["hello"];
+  _object["hello"] = 1;
   EXPECT_EQ(1, _object.size());
 
-  _object["hello"];
+  _object["hello"] = 2;
   EXPECT_EQ(1, _object.size());
 }
 
 TEST_F(JsonObject_Container_Tests, Shrink_WhenValuesAreRemoved) {
-  _object["hello"];
-  _object["world"];
+  _object["hello"] = 1;
+  _object["world"] = 2;
 
   _object.remove("hello");
   EXPECT_EQ(1, _object.size());
@@ -49,8 +49,8 @@ TEST_F(JsonObject_Container_Tests, Shrink_WhenValuesAreRemoved) {
 
 TEST_F(JsonObject_Container_Tests,
        DoNotShrink_WhenRemoveIsCalledWithAWrongKey) {
-  _object["hello"];
-  _object["world"];
+  _object["hello"] = 1;
+  _object["world"] = 2;
 
   _object.remove(":-P");
 

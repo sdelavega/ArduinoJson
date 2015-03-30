@@ -27,7 +27,7 @@ const JsonVariant &JsonObject::at(const char *key) const {
   return node ? node->content.value : JsonVariant::invalid();
 }
 
-JsonVariant &JsonObject::operator[](const char *key) {
+JsonVariant &JsonObject::add(const char *key) {
   // try to find an existing node
   node_type *node = getNodeAt(key);
 

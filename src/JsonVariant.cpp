@@ -35,7 +35,7 @@ JsonVariant &JsonVariant::operator[](int index) {
   return _content.asArray->operator[](index);
 }
 
-JsonVariant &JsonVariant::operator[](const char *key) {
+JsonVariant JsonVariant::operator[](const char *key) {
   if (_type != JSON_OBJECT) return JsonVariant::invalid();
   return _content.asObject->operator[](key);
 }
