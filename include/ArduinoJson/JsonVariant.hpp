@@ -114,22 +114,13 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
 
   // Create a JsonVariant containing the specified value.
   JsonVariant &operator=(const JsonVariant &other) {
-    if (_type != Internals::JSON_INVALID) {
-      _type = other._type;
-      _content = other._content;
-    }
+    _type = other._type;
+    _content = other._content;
     return *this;
   }
 
   // Tells weither the variant is valid.
-  bool success() const {
-    return _type != Internals::JSON_INVALID &&
-           _type != Internals::JSON_UNDEFINED;
-  }
-
-  // Returns an invalid variant.
-  // This is meant to replace a NULL pointer.
-  static JsonVariant &invalid() { return _invalid; }
+  bool success() const { return _type != Internals::JSON_UNDEFINED; }
 
   // Serialize the variant to a JsonWriter
   void writeTo(Internals::JsonWriter &writer) const;
@@ -142,14 +133,14 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // Mimics an array.
   // Returns the element at specified index if the variant is an array.
   // Returns JsonVariant::invalid() if the variant is not an array.
-  JsonVariant &operator[](int index);
+  const JsonVariant operator[](int index) const;
 
   // Mimics an object.
   // Returns the value associated with the specified key if the variant is
   // an
   // object.
   // Return JsonVariant::invalid() if the variant is not an object.
-  JsonVariant operator[](const char *key);
+  const JsonVariant operator[](const char *key) const;
 
  private:
   // Special constructor used only to create _invalid.
@@ -160,9 +151,6 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
 
   // The various alternatives for the value of the variant.
   Internals::JsonVariantContent _content;
-
-  // The instance returned by JsonVariant::invalid()
-  static JsonVariant _invalid;
 };
 }
 

@@ -160,8 +160,6 @@ void JsonParser::parseBooleanTo(JsonVariant &destination) {
     destination = true;
   else if (skip("false"))
     destination = false;
-  else
-    destination = JsonVariant::invalid();
 }
 
 void JsonParser::parseNumberTo(JsonVariant &destination) {
@@ -188,10 +186,7 @@ void JsonParser::parseNumberTo(JsonVariant &destination) {
 
 void JsonParser::parseNullTo(JsonVariant &destination) {
   const char *NULL_STRING = NULL;
-  if (skip("null"))
-    destination = NULL_STRING;
-  else
-    destination = JsonVariant::invalid();
+  if (skip("null")) destination = NULL_STRING;
 }
 
 const char *JsonParser::parseString() {

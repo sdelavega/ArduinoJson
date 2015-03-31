@@ -12,8 +12,6 @@
 using namespace ArduinoJson;
 using namespace ArduinoJson::Internals;
 
-JsonVariant JsonVariant::_invalid(JSON_INVALID);
-
 JsonArray &JsonVariant::asArray() const {
   return _type == Internals::JSON_ARRAY ? *_content.asArray
                                         : JsonArray::invalid();
@@ -30,13 +28,13 @@ size_t JsonVariant::size() const {
   return 0;
 }
 
-JsonVariant &JsonVariant::operator[](int index) {
-  if (_type != JSON_ARRAY) return JsonVariant::invalid();
+const JsonVariant JsonVariant::operator[](int index) const {
+  if (_type != JSON_ARRAY) return JsonVariant();
   return _content.asArray->operator[](index);
 }
 
-JsonVariant JsonVariant::operator[](const char *key) {
-  if (_type != JSON_OBJECT) return JsonVariant::invalid();
+const JsonVariant JsonVariant::operator[](const char *key) const {
+  if (_type != JSON_OBJECT) return JsonVariant();
   return _content.asObject->operator[](key);
 }
 

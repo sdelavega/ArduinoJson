@@ -14,10 +14,10 @@ using namespace ArduinoJson::Internals;
 
 JsonArray JsonArray::_invalid(NULL);
 
-JsonVariant &JsonArray::at(int index) const {
+JsonVariant JsonArray::at(int index) const {
   node_type *node = _firstNode;
   while (node && index--) node = node->next;
-  return node ? node->content : JsonVariant::invalid();
+  return node ? node->content : JsonVariant();
 }
 
 void JsonArray::add(const JsonVariant &value) {

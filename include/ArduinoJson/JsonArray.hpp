@@ -38,10 +38,10 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
 
  public:
   // Returns the JsonVariant at the specified index (synonym for operator[])
-  JsonVariant &at(int index) const;
+  JsonVariant at(int index) const;
 
   // Returns the JsonVariant at the specified index (synonym for at())
-  JsonVariant &operator[](int index) const { return at(index); }
+  JsonVariant operator[](int index) const { return at(index); }
 
   // Adds the specified value at the end of the array.
   void add(const JsonVariant &value);

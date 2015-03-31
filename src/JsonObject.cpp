@@ -17,14 +17,9 @@ using namespace ArduinoJson::Internals;
 
 JsonObject JsonObject::_invalid(NULL);
 
-JsonVariant &JsonObject::at(const char *key) {
+const JsonVariant JsonObject::at(const char *key) const {
   node_type *node = getNodeAt(key);
-  return node ? node->content.value : JsonVariant::invalid();
-}
-
-const JsonVariant &JsonObject::at(const char *key) const {
-  node_type *node = getNodeAt(key);
-  return node ? node->content.value : JsonVariant::invalid();
+  return node ? node->content.value : JsonVariant();
 }
 
 void JsonObject::add(const char *key, const JsonVariant &value) {

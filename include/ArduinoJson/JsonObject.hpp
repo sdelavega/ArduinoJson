@@ -42,12 +42,8 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   typedef JsonPair value_type;
 
   // Gets the JsonVariant associated with the specified key.
-  // Returns a reference or JsonVariant::invalid() if not found.
-  JsonVariant &at(key_type key);
-
-  // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant &at(key_type key) const;
+  const JsonVariant at(key_type key) const;
 
   // Gets or create the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if allocation failed.
@@ -55,7 +51,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant &operator[](key_type key) const { return at(key); }
+  const JsonVariant operator[](key_type key) const { return at(key); }
 
   // Adds the specified key with the specified value.
   void add(key_type key, const JsonVariant &value);
