@@ -133,9 +133,10 @@ JsonObject &JsonParser::parseObject() {
     if (!skip(':')) goto ERROR_MISSING_COLON;
 
     // 2 - Parse value
-    JsonVariant &value = object.add(key);
+    JsonVariant value;
     parseAnythingTo(value);
     if (!value.success()) goto ERROR_INVALID_VALUE;
+    object.add(key, value);
 
     // 3 - More keys/values?
     if (skip('}')) goto SUCCESS_NON_EMPTY_OBJECT;

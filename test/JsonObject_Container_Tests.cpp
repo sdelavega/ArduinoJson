@@ -121,6 +121,6 @@ TEST_F(JsonObject_Container_Tests, ContainsKeyReturnTrueForDefinedValue) {
 }
 
 TEST_F(JsonObject_Container_Tests, ContainsKeyReturnFalseForUndefinedValue) {
-  _object.add("hello");
+  _object.add("hello", JsonVariant());
   EXPECT_FALSE(_object.containsKey("hello"));
 }

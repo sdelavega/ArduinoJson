@@ -57,16 +57,12 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Returns a constant reference or JsonVariant::invalid() if not found.
   const JsonVariant &operator[](key_type key) const { return at(key); }
 
-  // Adds an uninitialized JsonVariant associated with the specified key.
-  // Return a reference or JsonVariant::invalid() if allocation fails.
-  JsonVariant &add(key_type key);
-
   // Adds the specified key with the specified value.
-  void add(key_type key, const JsonVariant &value) { add(key) = value; }
+  void add(key_type key, const JsonVariant &value);
 
   // Adds the specified key with the specified value.
   void add(key_type key, double value, uint8_t digits) {
-    add(key) = JsonVariant(value, digits);
+    add(key, JsonVariant(value, digits));
   }
 
   // Creates and adds a JsonArray.

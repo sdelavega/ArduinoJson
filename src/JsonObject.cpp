@@ -27,20 +27,20 @@ const JsonVariant &JsonObject::at(const char *key) const {
   return node ? node->content.value : JsonVariant::invalid();
 }
 
-JsonVariant &JsonObject::add(const char *key) {
+void JsonObject::add(const char *key, const JsonVariant &value) {
   // try to find an existing node
   node_type *node = getNodeAt(key);
 
-  // not fount => create a new one
+  // not found => create a new one
   if (!node) {
     node = createNode();
-    if (!node) return JsonVariant::invalid();
+    if (!node) return;  // not enough memory
 
     node->content.key = key;
     addNode(node);
   }
 
-  return node->content.value;
+  node->content.value = value;
 }
 
 void JsonObject::remove(char const *key) { removeNode(getNodeAt(key)); }
