@@ -43,7 +43,10 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant at(key_type key) const;
+  const JsonVariant at(key_type key) const {
+    node_type *node = getNodeAt(key);
+    return node ? node->content.value : JsonVariant();
+  }
 
   // Gets or create the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if allocation failed.
@@ -73,7 +76,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   bool containsKey(key_type key) const { return at(key).success(); }
 
   // Removes the specified key and the associated value.
-  void remove(key_type key);
+  void remove(key_type key) { removeNode(getNodeAt(key)); }
 
   // Returns a reference an invalid JsonObject.
   // This object is meant to replace a NULL pointer.
@@ -101,5 +104,15 @@ namespace ArduinoJson {
 
 inline JsonObjectElement JsonObject::operator[](key_type key) {
   return JsonObjectElement(*this, key);
+}
+
+inline JsonObject &JsonVariant::asObject() const {
+  return _type == Internals::JSON_OBJECT ? *_content.asObject
+                                         : JsonObject::invalid();
+}
+
+inline const JsonVariant JsonVariant::operator[](const char *key) const {
+  if (_type != Internals::JSON_OBJECT) return JsonVariant();
+  return _content.asObject->operator[](key);
 }
 }

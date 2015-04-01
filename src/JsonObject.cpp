@@ -17,11 +17,6 @@ using namespace ArduinoJson::Internals;
 
 JsonObject JsonObject::_invalid(NULL);
 
-const JsonVariant JsonObject::at(const char *key) const {
-  node_type *node = getNodeAt(key);
-  return node ? node->content.value : JsonVariant();
-}
-
 void JsonObject::add(const char *key, const JsonVariant &value) {
   // try to find an existing node
   node_type *node = getNodeAt(key);
@@ -38,9 +33,7 @@ void JsonObject::add(const char *key, const JsonVariant &value) {
   node->content.value = value;
 }
 
-void JsonObject::remove(char const *key) { removeNode(getNodeAt(key)); }
-
-JsonArray &JsonObject::createNestedArray(char const *key) {
+JsonArray &JsonObject::createNestedArray(const char *key) {
   if (!_buffer) return JsonArray::invalid();
   JsonArray &array = _buffer->createArray();
   add(key, array);
