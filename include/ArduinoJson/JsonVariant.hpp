@@ -12,6 +12,7 @@
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
+#include "JsonValue.hpp"
 
 namespace ArduinoJson {
 
@@ -26,7 +27,8 @@ class JsonObject;
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
 // - a reference to a JsonArray or JsonObject
-class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
+class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
+                    public JsonValue<JsonVariant> {
  public:
   // Creates an uninitialized JsonVariant
   JsonVariant() : _type(Internals::JSON_UNDEFINED) {}
@@ -60,50 +62,10 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
   // Create a JsonVariant containing a reference to an object.
   JsonVariant(JsonObject &object);
 
-  // Gets the variant as a boolean value.
-  // Returns false if the variant is not a boolean value.
-  operator bool() const;
-
-  // Gets the variant as a floating-point value.
-  // Returns 0.0 if the variant is not a floating-point value
-  operator double() const;
-  operator float() const;
-
-  // Gets the variant as an integer value.
-  // Returns 0 if the variant is not an integer value.
-  operator signed long() const;
-  operator signed char() const;
-  operator signed int() const;
-  operator signed short() const;
-  operator unsigned char() const;
-  operator unsigned int() const;
-  operator unsigned long() const;
-  operator unsigned short() const;
-
-  // Gets the variant as a string.
-  // Returns NULL if variant is not a string.
-  operator const char *() const { return asString(); }
-  const char *asString() const;
-
-  // Gets the variant as an array.
-  // Returns a reference to the JsonArray or JsonArray::invalid() if the
-  // variant
-  // is not an array.
-  operator JsonArray &() const { return asArray(); }
-  JsonArray &asArray() const;
-
-  // Gets the variant as an object.
-  // Returns a reference to the JsonObject or JsonObject::invalid() if the
-  // variant is not an object.
-  operator JsonObject &() const { return asObject(); }
-  JsonObject &asObject() const;
-
   // Get the variant as the specified type.
   // See cast operators for details.
   template <typename T>
-  T as() const {
-    return static_cast<T>(*this);
-  }
+  T as() const;
 
   // Tells weither the variant has the specified type.
   // Returns true if the variant has type type T, false otherwise.
@@ -168,5 +130,3 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant> {
 #include "JsonVariant.UnsignedInt.hpp"
 #include "JsonVariant.UnsignedLong.hpp"
 #include "JsonVariant.UnsignedShort.hpp"
-
-#include "JsonVariant.Comparisons.hpp"

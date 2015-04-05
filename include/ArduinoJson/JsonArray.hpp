@@ -77,7 +77,14 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   static JsonArray _invalid;
 };
 
-inline JsonArray &JsonVariant::asArray() const {
+template <>
+inline JsonArray &JsonVariant::as<JsonArray &>() const {
+  return _type == Internals::JSON_ARRAY ? *_content.asArray
+                                        : JsonArray::invalid();
+}
+
+template <>
+inline const JsonArray &JsonVariant::as<const JsonArray &>() const {
   return _type == Internals::JSON_ARRAY ? *_content.asArray
                                         : JsonArray::invalid();
 }

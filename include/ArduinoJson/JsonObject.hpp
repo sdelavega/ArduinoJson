@@ -106,7 +106,14 @@ inline JsonObjectElement JsonObject::operator[](key_type key) {
   return JsonObjectElement(*this, key);
 }
 
-inline JsonObject &JsonVariant::asObject() const {
+template <>
+inline JsonObject &JsonVariant::as<JsonObject &>() const {
+  return _type == Internals::JSON_OBJECT ? *_content.asObject
+                                         : JsonObject::invalid();
+}
+
+template <>
+inline const JsonObject &JsonVariant::as<const JsonObject &>() const {
   return _type == Internals::JSON_OBJECT ? *_content.asObject
                                          : JsonObject::invalid();
 }

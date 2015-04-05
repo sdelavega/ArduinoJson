@@ -13,7 +13,8 @@ inline JsonVariant::JsonVariant(bool value) {
   _content.asBoolean = value;
 }
 
-inline JsonVariant::operator bool() const {
+template <>
+inline bool JsonVariant::as<bool>() const {
   return _type == Internals::JSON_BOOLEAN ? _content.asBoolean : false;
 }
 

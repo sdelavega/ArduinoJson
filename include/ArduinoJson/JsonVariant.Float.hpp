@@ -14,7 +14,8 @@ inline JsonVariant::JsonVariant(float value, uint8_t decimals) {
   _content.asDouble = value;
 }
 
-inline JsonVariant::operator float() const {
+template <>
+inline float JsonVariant::as<float>() const {
   return _type >= Internals::JSON_DOUBLE_0_DECIMALS
              ? static_cast<float>(_content.asDouble)
              : 0.0f;

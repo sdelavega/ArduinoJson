@@ -13,7 +13,8 @@ inline JsonVariant::JsonVariant(signed short value) {
   _content.asLong = value;
 }
 
-inline JsonVariant::operator signed short() const {
+template <>
+inline signed short JsonVariant::as<signed short>() const {
   return _type == Internals::JSON_LONG
              ? static_cast<signed short>(_content.asLong)
              : 0;
