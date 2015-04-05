@@ -12,9 +12,4 @@ inline JsonVariant::JsonVariant(const char* value) {
   _type = Internals::JSON_STRING;
   _content.asString = value;
 }
-
-template <>
-inline const char* JsonVariant::as<const char*>() const {
-  return _type == Internals::JSON_STRING ? _content.asString : NULL;
-}
 }

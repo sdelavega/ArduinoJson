@@ -12,9 +12,4 @@ inline JsonVariant::JsonVariant(bool value) {
   _type = Internals::JSON_BOOLEAN;
   _content.asBoolean = value;
 }
-
-template <>
-inline bool JsonVariant::as<bool>() const {
-  return _type == Internals::JSON_BOOLEAN ? _content.asBoolean : false;
-}
 }

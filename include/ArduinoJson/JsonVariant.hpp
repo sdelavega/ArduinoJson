@@ -65,7 +65,10 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   // Get the variant as the specified type.
   // See cast operators for details.
   template <typename T>
-  T as() const;
+  T as() const {
+    return Internals::matches<T>(_type) ? Internals::get<T>(_content)
+                                        : Internals::invalid<T>();
+  }
 
   // Tells weither the variant has the specified type.
   // Returns true if the variant has type type T, false otherwise.

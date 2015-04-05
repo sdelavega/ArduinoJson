@@ -122,4 +122,16 @@ inline const JsonVariant JsonVariant::operator[](const char *key) const {
   if (_type != Internals::JSON_OBJECT) return JsonVariant();
   return _content.asObject->operator[](key);
 }
+
+namespace Internals {
+template <>
+inline JsonObject &invalid<JsonObject &>() {
+  return JsonObject::invalid();
+}
+
+template <>
+inline JsonObject const &invalid<JsonObject const &>() {
+  return JsonObject::invalid();
+}
+}
 }

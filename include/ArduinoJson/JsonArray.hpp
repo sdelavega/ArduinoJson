@@ -93,4 +93,16 @@ inline const JsonVariant JsonVariant::operator[](int index) const {
   if (_type != Internals::JSON_ARRAY) return JsonVariant();
   return _content.asArray->operator[](index);
 }
+
+namespace Internals {
+template <>
+inline JsonArray &invalid<JsonArray &>() {
+  return JsonArray::invalid();
+}
+
+template <>
+inline JsonArray const &invalid<JsonArray const &>() {
+  return JsonArray::invalid();
+}
+}
 }

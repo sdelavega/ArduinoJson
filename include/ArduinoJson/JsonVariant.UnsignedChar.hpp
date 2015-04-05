@@ -12,11 +12,4 @@ inline JsonVariant::JsonVariant(unsigned char value) {
   _type = Internals::JSON_LONG;
   _content.asLong = value;
 }
-
-template <>
-inline unsigned char JsonVariant::as<unsigned char>() const {
-  return _type == Internals::JSON_LONG
-             ? static_cast<unsigned char>(_content.asLong)
-             : 0;
-}
 }

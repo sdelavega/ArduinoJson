@@ -12,11 +12,4 @@ inline JsonVariant::JsonVariant(signed int value) {
   _type = Internals::JSON_LONG;
   _content.asLong = value;
 }
-
-template <>
-inline signed int JsonVariant::as<signed int>() const {
-  return _type == Internals::JSON_LONG
-             ? static_cast<signed int>(_content.asLong)
-             : 0;
-}
 }
