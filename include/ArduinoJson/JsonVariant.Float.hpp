@@ -20,9 +20,4 @@ inline float JsonVariant::as<float>() const {
              ? static_cast<float>(_content.asDouble)
              : 0.0f;
 }
-
-template <>
-inline bool JsonVariant::is<float>() const {
-  return _type >= Internals::JSON_DOUBLE_0_DECIMALS;
-}
 }

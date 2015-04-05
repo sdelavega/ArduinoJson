@@ -17,9 +17,4 @@ template <>
 inline bool JsonVariant::as<bool>() const {
   return _type == Internals::JSON_BOOLEAN ? _content.asBoolean : false;
 }
-
-template <>
-inline bool JsonVariant::is<bool>() const {
-  return _type == Internals::JSON_BOOLEAN;
-}
 }

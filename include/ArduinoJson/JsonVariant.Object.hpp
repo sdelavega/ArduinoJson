@@ -12,14 +12,4 @@ inline JsonVariant::JsonVariant(JsonObject &object) {
   _type = Internals::JSON_OBJECT;
   _content.asObject = &object;
 }
-
-template <>
-inline bool JsonVariant::is<JsonObject &>() const {
-  return _type == Internals::JSON_OBJECT;
-}
-
-template <>
-inline bool JsonVariant::is<const JsonObject &>() const {
-  return _type == Internals::JSON_OBJECT;
-}
 }

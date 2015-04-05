@@ -19,9 +19,4 @@ inline unsigned long JsonVariant::as<unsigned long>() const {
              ? static_cast<unsigned long>(_content.asLong)
              : 0;
 }
-
-template <>
-inline bool JsonVariant::is<unsigned long>() const {
-  return _type == Internals::JSON_LONG;
-}
 }

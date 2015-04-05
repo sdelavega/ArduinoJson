@@ -17,9 +17,4 @@ template <>
 inline const char* JsonVariant::as<const char*>() const {
   return _type == Internals::JSON_STRING ? _content.asString : NULL;
 }
-
-template <>
-inline bool JsonVariant::is<const char*>() const {
-  return _type == Internals::JSON_STRING;
-}
 }

@@ -71,7 +71,7 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   // Returns true if the variant has type type T, false otherwise.
   template <typename T>
   bool is() const {
-    return false;
+    return Internals::matches<T>(_type);
   }
 
   // Create a JsonVariant containing the specified value.

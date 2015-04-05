@@ -18,9 +18,4 @@ template <>
 inline double JsonVariant::as<double>() const {
   return _type >= Internals::JSON_DOUBLE_0_DECIMALS ? _content.asDouble : 0.0;
 }
-
-template <>
-inline bool JsonVariant::is<double>() const {
-  return _type >= Internals::JSON_DOUBLE_0_DECIMALS;
-}
 }
