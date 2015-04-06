@@ -125,12 +125,12 @@ inline const JsonVariant JsonVariant::operator[](const char *key) const {
 
 namespace Internals {
 template <>
-inline JsonObject &invalid<JsonObject &>() {
+inline JsonObject const &invalid<JsonObject const &>() {
   return JsonObject::invalid();
 }
 
 template <>
-inline JsonObject const &invalid<JsonObject const &>() {
+inline JsonObject &invalid<JsonObject &>() {
   return JsonObject::invalid();
 }
 }

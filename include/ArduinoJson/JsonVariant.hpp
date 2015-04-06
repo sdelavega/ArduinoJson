@@ -117,19 +117,76 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   // The various alternatives for the value of the variant.
   Internals::JsonVariantContent _content;
 };
+
+inline JsonVariant::JsonVariant(bool value) {
+  _type = Internals::JSON_BOOLEAN;
+  _content.asBoolean = value;
 }
 
-#include "JsonVariant.Array.hpp"
-#include "JsonVariant.Bool.hpp"
-#include "JsonVariant.CharPtr.hpp"
-#include "JsonVariant.Double.hpp"
-#include "JsonVariant.Float.hpp"
-#include "JsonVariant.Object.hpp"
-#include "JsonVariant.SignedChar.hpp"
-#include "JsonVariant.SignedInt.hpp"
-#include "JsonVariant.SignedLong.hpp"
-#include "JsonVariant.SignedShort.hpp"
-#include "JsonVariant.UnsignedChar.hpp"
-#include "JsonVariant.UnsignedInt.hpp"
-#include "JsonVariant.UnsignedLong.hpp"
-#include "JsonVariant.UnsignedShort.hpp"
+inline JsonVariant::JsonVariant(const char *value) {
+  _type = Internals::JSON_STRING;
+  _content.asString = value;
+}
+
+inline JsonVariant::JsonVariant(double value, uint8_t decimals) {
+  _type = static_cast<Internals::JsonVariantType>(
+      Internals::JSON_DOUBLE_0_DECIMALS + decimals);
+  _content.asDouble = value;
+}
+
+inline JsonVariant::JsonVariant(float value, uint8_t decimals) {
+  _type = static_cast<Internals::JsonVariantType>(
+      Internals::JSON_DOUBLE_0_DECIMALS + decimals);
+  _content.asDouble = value;
+}
+
+inline JsonVariant::JsonVariant(JsonArray &array) {
+  _type = Internals::JSON_ARRAY;
+  _content.asArray = &array;
+}
+
+inline JsonVariant::JsonVariant(JsonObject &object) {
+  _type = Internals::JSON_OBJECT;
+  _content.asObject = &object;
+}
+
+inline JsonVariant::JsonVariant(signed char value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(signed int value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(signed long value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(signed short value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(unsigned char value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(unsigned int value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(unsigned long value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+
+inline JsonVariant::JsonVariant(unsigned short value) {
+  _type = Internals::JSON_LONG;
+  _content.asLong = value;
+}
+}
