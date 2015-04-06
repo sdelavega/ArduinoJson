@@ -22,7 +22,7 @@ namespace ArduinoJson {
 // Forward declarations
 class JsonArray;
 class JsonBuffer;
-class JsonObjectElement;
+class JsonObjectSubscript;
 
 // A dictionary of JsonVariant indexed by string (char*)
 //
@@ -50,7 +50,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 
   // Gets or create the JsonVariant associated with the specified key.
   // Returns a reference or JsonVariant::invalid() if allocation failed.
-  JsonObjectElement operator[](key_type key);
+  JsonObjectSubscript operator[](key_type key);
 
   // Gets the JsonVariant associated with the specified key.
   // Returns a constant reference or JsonVariant::invalid() if not found.
@@ -73,7 +73,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JsonObject &createNestedObject(key_type key);
 
   // Tells weither the specified key is present and associated with a value.
-  bool containsKey(key_type key) const { return at(key).success(); }
+  bool containsKey(key_type key) const { return getNodeAt(key) != NULL; }
 
   // Removes the specified key and the associated value.
   void remove(key_type key) { removeNode(getNodeAt(key)); }
@@ -98,12 +98,12 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
 };
 }
 
-#include "JsonObjectElement.hpp"
+#include "JsonObjectSubscript.hpp"
 
 namespace ArduinoJson {
 
-inline JsonObjectElement JsonObject::operator[](key_type key) {
-  return JsonObjectElement(*this, key);
+inline JsonObjectSubscript JsonObject::operator[](key_type key) {
+  return JsonObjectSubscript(*this, key);
 }
 
 inline const JsonVariant JsonVariant::operator[](const char *key) const {

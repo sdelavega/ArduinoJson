@@ -12,7 +12,7 @@
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
-#include "JsonValue.hpp"
+#include "JsonVariantBase.hpp"
 
 namespace ArduinoJson {
 
@@ -28,7 +28,7 @@ class JsonObject;
 // - a string (const char*)
 // - a reference to a JsonArray or JsonObject
 class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
-                    public JsonValue<JsonVariant> {
+                    public JsonVariantBase<JsonVariant> {
  public:
   // Creates an uninitialized JsonVariant
   JsonVariant() : _type(Internals::JSON_UNDEFINED) {}

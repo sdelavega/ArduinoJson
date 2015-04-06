@@ -6,20 +6,20 @@
 
 #pragma once
 
-#include "JsonValue.hpp"
+#include "JsonVariantBase.hpp"
 
 namespace ArduinoJson {
-class JsonObjectElement : public JsonValue<JsonObjectElement> {
+class JsonObjectSubscript : public JsonVariantBase<JsonObjectSubscript> {
  public:
-  JsonObjectElement(JsonObject& object, const char* key)
+  JsonObjectSubscript(JsonObject& object, const char* key)
       : _object(object), _key(key) {}
 
-  JsonObjectElement& operator=(const JsonVariant& value) {
+  JsonObjectSubscript& operator=(const JsonVariant& value) {
     _object.add(_key, value);
     return *this;
   }
 
-  bool success() const { return _object.at(_key).success(); }
+  bool success() const { return _object.containsKey(_key); }
 
   operator JsonVariant() const { return _object.at(_key); }
 

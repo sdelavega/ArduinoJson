@@ -37,8 +37,8 @@ std::ostream& ArduinoJson::operator<<(std::ostream& os,
   return os;
 }
 
-std::ostream& ArduinoJson::operator<<(std::ostream& os,
-                                      const ArduinoJson::JsonObjectElement& v) {
+std::ostream& ArduinoJson::operator<<(
+    std::ostream& os, const ArduinoJson::JsonObjectSubscript& v) {
   JsonVariant value = v;
   return os << value;
 }
