@@ -21,16 +21,16 @@ class JsonObjectSubscript : public JsonVariantBase<JsonObjectSubscript> {
 
   bool success() const { return _object.containsKey(_key); }
 
-  operator JsonVariant() const { return _object.at(_key); }
+  operator JsonVariant() const { return _object.get(_key); }
 
   template <typename T>
   T as() const {
-    return _object.at(_key).as<T>();
+    return _object.get(_key).as<T>();
   }
 
   template <typename T>
   T is() const {
-    return _object.at(_key).is<T>();
+    return _object.get(_key).is<T>();
   }
 
  private:

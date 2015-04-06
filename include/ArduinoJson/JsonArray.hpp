@@ -39,10 +39,10 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   friend class JsonArraySubscript;
 
  public:
-  // Returns the JsonVariant at the specified index
+  // Gets the JsonVariant at the specified index
   JsonVariant operator[](size_t index) const { return get(index); }
 
-  // Returns the JsonVariant at the specified index (synonym for at())
+  // Gets or sets the JsonVariant at specified index
   JsonArraySubscript operator[](size_t index);
 
   // Adds the specified value at the end of the array.
@@ -50,9 +50,7 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
 
   // Adds the specified double value at the end of the array.
   // The value will be printed with the specified number of decimal digits.
-  void add(double value, uint8_t decimals) {
-    add(JsonVariant(value, decimals));
-  }
+  void add(double value, uint8_t decimals);
 
   // Creates a JsonArray and adds a reference at the end of the array.
   // It's a shortcut for JsonBuffer::createArray() and JsonArray::add()

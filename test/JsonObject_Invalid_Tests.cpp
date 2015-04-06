@@ -7,10 +7,6 @@
 #include <gtest/gtest.h>
 #include <ArduinoJson.h>
 
-TEST(JsonObject_Invalid_Tests, AtFails) {
-  ASSERT_FALSE(JsonObject::invalid().at(0).success());
-}
-
 TEST(JsonObject_Invalid_Tests, SubscriptFails) {
   ASSERT_FALSE(JsonObject::invalid()[0].success());
 }

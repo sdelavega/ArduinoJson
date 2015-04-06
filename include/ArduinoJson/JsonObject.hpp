@@ -36,25 +36,17 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
                    public Internals::JsonBufferAllocated {
   // JsonBuffer is a friend because it needs to call the private constructor.
   friend class JsonBuffer;
+  friend class JsonObjectSubscript;
 
  public:
   typedef const char *key_type;
   typedef JsonPair value_type;
 
-  // Gets the JsonVariant associated with the specified key.
-  // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant at(key_type key) const {
-    node_type *node = getNodeAt(key);
-    return node ? node->content.value : JsonVariant();
-  }
-
-  // Gets or create the JsonVariant associated with the specified key.
-  // Returns a reference or JsonVariant::invalid() if allocation failed.
+  // Gets or sets the value associated with the specified key.
   JsonObjectSubscript operator[](key_type key);
 
-  // Gets the JsonVariant associated with the specified key.
-  // Returns a constant reference or JsonVariant::invalid() if not found.
-  const JsonVariant operator[](key_type key) const { return at(key); }
+  // Gets the value associated with the specified key.
+  const JsonObjectSubscript operator[](key_type key) const;
 
   // Adds the specified key with the specified value.
   void add(key_type key, const JsonVariant &value);
@@ -73,10 +65,10 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JsonObject &createNestedObject(key_type key);
 
   // Tells weither the specified key is present and associated with a value.
-  bool containsKey(key_type key) const { return getNodeAt(key) != NULL; }
+  bool containsKey(key_type key) const;
 
   // Removes the specified key and the associated value.
-  void remove(key_type key) { removeNode(getNodeAt(key)); }
+  void remove(key_type key);
 
   // Returns a reference an invalid JsonObject.
   // This object is meant to replace a NULL pointer.
@@ -93,33 +85,11 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Returns the list node that matches the specified key.
   node_type *getNodeAt(key_type key) const;
 
+  JsonVariant get(key_type key) const;
+
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;
 };
 }
 
-#include "JsonObjectSubscript.hpp"
-
-namespace ArduinoJson {
-
-inline JsonObjectSubscript JsonObject::operator[](key_type key) {
-  return JsonObjectSubscript(*this, key);
-}
-
-inline const JsonVariant JsonVariant::operator[](const char *key) const {
-  if (_type != Internals::JSON_OBJECT) return JsonVariant();
-  return _content.asObject->operator[](key);
-}
-
-namespace Internals {
-template <>
-inline JsonObject const &invalid<JsonObject const &>() {
-  return JsonObject::invalid();
-}
-
-template <>
-inline JsonObject &invalid<JsonObject &>() {
-  return JsonObject::invalid();
-}
-}
-}
+#include "JsonObject.ipp"
