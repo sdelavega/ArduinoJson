@@ -15,6 +15,10 @@ inline JsonArraySubscript JsonArray::operator[](size_t index) {
   return JsonArraySubscript(*this, index);
 }
 
+inline const JsonArraySubscript JsonArray::operator[](size_t index) const {
+  return JsonArraySubscript(*const_cast<JsonArray *>(this), index);
+}
+
 inline void JsonArray::add(double value, uint8_t decimals) {
   add(JsonVariant(value, decimals));
 }
@@ -24,9 +28,16 @@ inline JsonVariant JsonArray::get(size_t index) const {
   return node ? node->content : JsonVariant();
 }
 
-inline const JsonVariant JsonVariant::operator[](int index) const {
-  if (_type != Internals::JSON_ARRAY) return JsonVariant();
-  return _content.asArray->operator[](index);
+inline void JsonArray::set(size_t index, const JsonVariant &value) {
+  node_type *node = getNodeAt(index);
+  if (node)
+    node->content = value;
+  else
+    add(value);
+}
+
+inline const JsonArraySubscript JsonVariant::operator[](int index) const {
+  return asArray()[index];
 }
 
 namespace Internals {

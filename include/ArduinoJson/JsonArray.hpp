@@ -39,10 +39,10 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   friend class JsonArraySubscript;
 
  public:
-  // Gets the JsonVariant at the specified index
-  JsonVariant operator[](size_t index) const { return get(index); }
+  // Gets the value at the specified index
+  const JsonArraySubscript operator[](size_t index) const;
 
-  // Gets or sets the JsonVariant at specified index
+  // Gets or sets the value at specified index
   JsonArraySubscript operator[](size_t index);
 
   // Adds the specified value at the end of the array.

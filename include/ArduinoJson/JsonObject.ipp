@@ -24,16 +24,16 @@ inline const JsonObjectSubscript JsonObject::operator[](key_type key) const {
   return JsonObjectSubscript(*const_cast<JsonObject *>(this), key);
 }
 
-inline const JsonVariant JsonVariant::operator[](const char *key) const {
-  if (_type != Internals::JSON_OBJECT) return JsonVariant();
-  return _content.asObject->operator[](key);
-}
-
 inline bool JsonObject::containsKey(key_type key) const {
   return getNodeAt(key) != NULL;
 }
 
 inline void JsonObject::remove(key_type key) { removeNode(getNodeAt(key)); }
+
+inline const JsonObjectSubscript JsonVariant::operator[](
+    const char *key) const {
+  return asObject()[key];
+}
 
 namespace Internals {
 template <>
