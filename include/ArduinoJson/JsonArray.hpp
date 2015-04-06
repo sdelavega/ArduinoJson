@@ -22,6 +22,7 @@ namespace ArduinoJson {
 // Forward declarations
 class JsonObject;
 class JsonBuffer;
+class JsonArraySubscript;
 
 // An array of JsonVariant.
 //
@@ -35,13 +36,14 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
                   public Internals::JsonBufferAllocated {
   // JsonBuffer is a friend because it needs to call the private constructor.
   friend class JsonBuffer;
+  friend class JsonArraySubscript;
 
  public:
-  // Returns the JsonVariant at the specified index (synonym for operator[])
-  JsonVariant at(int index) const;
+  // Returns the JsonVariant at the specified index
+  JsonVariant operator[](size_t index) const { return get(index); }
 
   // Returns the JsonVariant at the specified index (synonym for at())
-  JsonVariant operator[](int index) const { return at(index); }
+  JsonArraySubscript operator[](size_t index);
 
   // Adds the specified value at the end of the array.
   void add(const JsonVariant &value);
@@ -73,24 +75,15 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   explicit JsonArray(JsonBuffer *buffer)
       : Internals::List<JsonVariant>(buffer) {}
 
+  void set(size_t index, const JsonVariant &value);
+
+  JsonVariant get(size_t index) const;
+
+  node_type *getNodeAt(size_t index) const;
+
   // The instance returned by JsonArray::invalid()
   static JsonArray _invalid;
 };
-
-inline const JsonVariant JsonVariant::operator[](int index) const {
-  if (_type != Internals::JSON_ARRAY) return JsonVariant();
-  return _content.asArray->operator[](index);
 }
 
-namespace Internals {
-template <>
-inline JsonArray &invalid<JsonArray &>() {
-  return JsonArray::invalid();
-}
-
-template <>
-inline JsonArray const &invalid<JsonArray const &>() {
-  return JsonArray::invalid();
-}
-}
-}
+#include "JsonArray.ipp"

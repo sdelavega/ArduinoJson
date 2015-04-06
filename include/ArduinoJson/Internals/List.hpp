@@ -39,7 +39,7 @@ class List {
 
   // Returns the numbers of elements in the list.
   // For a JsonObject, it would return the number of key-value pairs
-  int size() const;
+  size_t size() const;
 
   iterator begin() { return iterator(_firstNode); }
   iterator end() { return iterator(NULL); }

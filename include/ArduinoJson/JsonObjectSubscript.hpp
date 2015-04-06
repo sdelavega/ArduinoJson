@@ -23,12 +23,6 @@ class JsonObjectSubscript : public JsonVariantBase<JsonObjectSubscript> {
 
   operator JsonVariant() const { return _object.at(_key); }
 
-  JsonArray& asArray() const { return as<JsonArray&>(); }
-  operator JsonArray&() const { return asArray(); }
-
-  JsonObject& asObject() const { return as<JsonObject&>(); }
-  operator JsonObject&() const { return asObject(); }
-
   template <typename T>
   T as() const {
     return _object.at(_key).as<T>();
