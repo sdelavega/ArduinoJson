@@ -34,11 +34,13 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
                   public Internals::ReferenceType,
                   public Internals::List<JsonVariant>,
                   public Internals::JsonBufferAllocated {
-  // JsonBuffer is a friend because it needs to call the private constructor.
-  friend class JsonBuffer;
-  friend class JsonArraySubscript;
-
  public:
+  // Create an empty JsonArray attached to the specified JsonBuffer.
+  // You should not call this constructor directly.
+  // Use JsonBuffer::createArray() instead.
+  explicit JsonArray(JsonBuffer *buffer)
+      : Internals::List<JsonVariant>(buffer) {}
+
   // Gets the value at the specified index
   const JsonArraySubscript operator[](size_t index) const;
 
@@ -48,9 +50,10 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   // Adds the specified value at the end of the array.
   void add(const JsonVariant &value);
 
-  // Adds the specified double value at the end of the array.
-  // The value will be printed with the specified number of decimal digits.
-  void add(double value, uint8_t decimals);
+  // Set the value at specified index.
+  void set(size_t index, const JsonVariant &value);
+
+  JsonVariant get(size_t index) const;
 
   // Creates a JsonArray and adds a reference at the end of the array.
   // It's a shortcut for JsonBuffer::createArray() and JsonArray::add()
@@ -69,14 +72,6 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   void writeTo(Internals::JsonWriter &writer) const;
 
  private:
-  // Create an empty JsonArray attached to the specified JsonBuffer.
-  explicit JsonArray(JsonBuffer *buffer)
-      : Internals::List<JsonVariant>(buffer) {}
-
-  void set(size_t index, const JsonVariant &value);
-
-  JsonVariant get(size_t index) const;
-
   node_type *getNodeAt(size_t index) const;
 
   // The instance returned by JsonArray::invalid()

@@ -106,6 +106,14 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   // The various alternatives for the value of the variant.
   Internals::JsonVariantContent _content;
 };
+
+inline JsonVariant float_with_n_digits(float value, uint8_t digits) {
+  return JsonVariant(value, digits);
+}
+
+inline JsonVariant double_with_n_digits(double value, uint8_t digits) {
+  return JsonVariant(value, digits);
+}
 }
 
 // Include inline implementations

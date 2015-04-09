@@ -19,10 +19,6 @@ inline const JsonArraySubscript JsonArray::operator[](size_t index) const {
   return JsonArraySubscript(*const_cast<JsonArray *>(this), index);
 }
 
-inline void JsonArray::add(double value, uint8_t decimals) {
-  add(JsonVariant(value, decimals));
-}
-
 inline JsonVariant JsonArray::get(size_t index) const {
   node_type *node = getNodeAt(index);
   return node ? node->content : JsonVariant();
