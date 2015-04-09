@@ -136,7 +136,7 @@ JsonObject &JsonParser::parseObject() {
     JsonVariant value;
     parseAnythingTo(value);
     if (!value.success()) goto ERROR_INVALID_VALUE;
-    object.add(key, value);
+    object.set(key, value);
 
     // 3 - More keys/values?
     if (skip('}')) goto SUCCESS_NON_EMPTY_OBJECT;

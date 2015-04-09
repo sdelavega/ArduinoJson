@@ -34,13 +34,14 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
                    public Internals::ReferenceType,
                    public Internals::List<JsonPair>,
                    public Internals::JsonBufferAllocated {
-  // JsonBuffer is a friend because it needs to call the private constructor.
-  friend class JsonBuffer;
-  friend class JsonObjectSubscript;
-
  public:
   typedef const char *key_type;
   typedef JsonPair value_type;
+
+  // Create an empty JsonArray attached to the specified JsonBuffer.
+  // You should not use this constructor directly.
+  // Instead, use JsonBuffer::createObject() or JsonBuffer.parseObject().
+  explicit JsonObject(JsonBuffer *buffer) : Internals::List<JsonPair>(buffer) {}
 
   // Gets or sets the value associated with the specified key.
   JsonObjectSubscript operator[](key_type key);
@@ -48,13 +49,11 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Gets the value associated with the specified key.
   const JsonObjectSubscript operator[](key_type key) const;
 
-  // Adds the specified key with the specified value.
-  void add(key_type key, const JsonVariant &value);
+  // Sets the specified key with the specified value.
+  void set(key_type key, const JsonVariant &value);
 
-  // Adds the specified key with the specified value.
-  void add(key_type key, double value, uint8_t digits) {
-    add(key, JsonVariant(value, digits));
-  }
+  // Gets the value associated with the specified key.
+  JsonVariant get(key_type key) const;
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
@@ -79,13 +78,8 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   void writeTo(Internals::JsonWriter &writer) const;
 
  private:
-  // Create an empty JsonArray attached to the specified JsonBuffer.
-  explicit JsonObject(JsonBuffer *buffer) : Internals::List<JsonPair>(buffer) {}
-
   // Returns the list node that matches the specified key.
   node_type *getNodeAt(key_type key) const;
-
-  JsonVariant get(key_type key) const;
 
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;

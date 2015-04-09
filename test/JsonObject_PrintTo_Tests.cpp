@@ -86,7 +86,7 @@ TEST_F(JsonObject_PrintTo_Tests, OneInteger) {
 }
 
 TEST_F(JsonObject_PrintTo_Tests, OneDoubleFourDigits) {
-  object.add("key", 3.14159265358979323846, 4);
+  object["key"] = double_with_n_digits(3.14159265358979323846, 4);
   outputMustBe("{\"key\":3.1416}");
 }
 

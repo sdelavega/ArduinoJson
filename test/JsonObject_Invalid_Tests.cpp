@@ -12,9 +12,9 @@ TEST(JsonObject_Invalid_Tests, SubscriptFails) {
 }
 
 TEST(JsonObject_Invalid_Tests, AddFails) {
-  JsonObject& array = JsonObject::invalid();
-  array.add("hello", "world");
-  ASSERT_EQ(0, array.size());
+  JsonObject& object = JsonObject::invalid();
+  object.set("hello", "world");
+  ASSERT_EQ(0, object.size());
 }
 
 TEST(JsonObject_Invalid_Tests, CreateNestedArrayFails) {

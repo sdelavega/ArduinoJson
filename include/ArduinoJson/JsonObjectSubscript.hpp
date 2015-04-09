@@ -15,7 +15,7 @@ class JsonObjectSubscript : public JsonVariantBase<JsonObjectSubscript> {
       : _object(object), _key(key) {}
 
   JsonObjectSubscript& operator=(const JsonVariant& value) {
-    _object.add(_key, value);
+    _object.set(_key, value);
     return *this;
   }
 

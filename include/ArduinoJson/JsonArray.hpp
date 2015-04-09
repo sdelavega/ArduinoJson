@@ -37,7 +37,7 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
  public:
   // Create an empty JsonArray attached to the specified JsonBuffer.
   // You should not call this constructor directly.
-  // Use JsonBuffer::createArray() instead.
+  // Instead, use JsonBuffer::createArray() or JsonBuffer::parseArray().
   explicit JsonArray(JsonBuffer *buffer)
       : Internals::List<JsonVariant>(buffer) {}
 
@@ -50,9 +50,10 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   // Adds the specified value at the end of the array.
   void add(const JsonVariant &value);
 
-  // Set the value at specified index.
+  // Sets the value at specified index.
   void set(size_t index, const JsonVariant &value);
 
+  // Gets the value at the specified index.
   JsonVariant get(size_t index) const;
 
   // Creates a JsonArray and adds a reference at the end of the array.

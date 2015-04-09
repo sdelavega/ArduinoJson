@@ -24,7 +24,7 @@ TEST_F(JsonObject_Container_Tests, Grow_WhenValuesAreAdded) {
   _object["hello"] = 1;
   EXPECT_EQ(1, _object.size());
 
-  _object.add("world", 2);
+  _object.set("world", 2);
   EXPECT_EQ(2, _object.size());
 }
 
@@ -116,11 +116,11 @@ TEST_F(JsonObject_Container_Tests, ContainsKeyReturnFalseForNonExistingKey) {
 }
 
 TEST_F(JsonObject_Container_Tests, ContainsKeyReturnTrueForDefinedValue) {
-  _object.add("hello", 42);
+  _object.set("hello", 42);
   EXPECT_TRUE(_object.containsKey("hello"));
 }
 
 TEST_F(JsonObject_Container_Tests, ContainsKeyReturnFalseForUndefinedValue) {
-  _object.add("hello", JsonVariant());
+  _object.set("hello", JsonVariant());
   EXPECT_FALSE(_object.containsKey("hello"));
 }
