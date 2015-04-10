@@ -84,15 +84,97 @@ inline JsonVariant::JsonVariant(unsigned short value) {
 
 template <typename T>
 inline T JsonVariant::as() const {
-  return Internals::matches<T>(_type) ? _content.as<T>()
-                                      : Internals::invalid<T>();
+  return is<T>() ? _content.as<T>() : invalid<T>();
 }
 
-// Tells weither the variant has the specified type.
-// Returns true if the variant has type type T, false otherwise.
+template <typename T>
+inline T JsonVariant::invalid() {
+  return T();
+}
+
 template <typename T>
 inline bool JsonVariant::is() const {
-  return Internals::matches<T>(_type);
+  return false;
+}
+
+template <>
+inline bool JsonVariant::is<bool>() const {
+  return _type == Internals::JSON_BOOLEAN;
+}
+
+template <>
+inline bool JsonVariant::is<char const *>() const {
+  return _type == Internals::JSON_STRING;
+}
+
+template <>
+inline bool JsonVariant::is<double>() const {
+  return _type >= Internals::JSON_DOUBLE_0_DECIMALS;
+}
+
+template <>
+inline bool JsonVariant::is<float>() const {
+  return _type >= Internals::JSON_DOUBLE_0_DECIMALS;
+}
+
+template <>
+inline bool JsonVariant::is<JsonArray &>() const {
+  return _type == Internals::JSON_ARRAY;
+}
+
+template <>
+inline bool JsonVariant::is<JsonArray const &>() const {
+  return _type == Internals::JSON_ARRAY;
+}
+
+template <>
+inline bool JsonVariant::is<JsonObject &>() const {
+  return _type == Internals::JSON_OBJECT;
+}
+
+template <>
+inline bool JsonVariant::is<JsonObject const &>() const {
+  return _type == Internals::JSON_OBJECT;
+}
+
+template <>
+inline bool JsonVariant::is<signed char>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<signed int>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<signed long>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<signed short>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<unsigned char>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<unsigned int>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<unsigned long>() const {
+  return _type == Internals::JSON_LONG;
+}
+
+template <>
+inline bool JsonVariant::is<unsigned short>() const {
+  return _type == Internals::JSON_LONG;
 }
 
 // Copy the value of the specified variant

@@ -36,15 +36,13 @@ inline const JsonArraySubscript JsonVariant::operator[](int index) const {
   return asArray()[index];
 }
 
-namespace Internals {
 template <>
-inline JsonArray &invalid<JsonArray &>() {
+inline JsonArray &JsonVariant::invalid<JsonArray &>() {
   return JsonArray::invalid();
 }
 
 template <>
-inline JsonArray const &invalid<JsonArray const &>() {
+inline JsonArray const &JsonVariant::invalid<JsonArray const &>() {
   return JsonArray::invalid();
-}
 }
 }

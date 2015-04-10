@@ -100,6 +100,9 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   const JsonObjectSubscript operator[](const char *key) const;
 
  private:
+  template <typename T>
+  static T invalid();
+
   // The current type of the variant
   Internals::JsonVariantType _type;
 

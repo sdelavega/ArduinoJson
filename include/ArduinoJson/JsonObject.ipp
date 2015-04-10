@@ -35,15 +35,13 @@ inline const JsonObjectSubscript JsonVariant::operator[](
   return asObject()[key];
 }
 
-namespace Internals {
 template <>
-inline JsonObject const &invalid<JsonObject const &>() {
+inline JsonObject const &JsonVariant::invalid<JsonObject const &>() {
   return JsonObject::invalid();
 }
 
 template <>
-inline JsonObject &invalid<JsonObject &>() {
+inline JsonObject &JsonVariant::invalid<JsonObject &>() {
   return JsonObject::invalid();
-}
 }
 }
