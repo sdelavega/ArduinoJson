@@ -23,89 +23,89 @@ union JsonVariantContent {
   const char* asString;  // asString can be null
   JsonArray* asArray;    // asArray cannot be null
   JsonObject* asObject;  // asObject cannot be null
+
+  template <typename T>
+  T as() const;
 };
 
-template <typename T>
-T get(JsonVariantContent);
-
 template <>
-inline bool get<bool>(JsonVariantContent c) {
-  return c.asBoolean;
+inline bool JsonVariantContent::as<bool>() const {
+  return asBoolean;
 }
 
 template <>
-inline char const* get<char const*>(JsonVariantContent c) {
-  return c.asString;
+inline char const* JsonVariantContent::as<char const*>() const {
+  return asString;
 }
 
 template <>
-inline double get<double>(JsonVariantContent c) {
-  return c.asDouble;
+inline double JsonVariantContent::as<double>() const {
+  return asDouble;
 }
 
 template <>
-inline float get<float>(JsonVariantContent c) {
-  return static_cast<float>(c.asDouble);
+inline float JsonVariantContent::as<float>() const {
+  return static_cast<float>(asDouble);
 }
 
 template <>
-inline JsonArray& get<JsonArray&>(JsonVariantContent c) {
-  return *c.asArray;
+inline JsonArray& JsonVariantContent::as<JsonArray&>() const {
+  return *asArray;
 }
 
 template <>
-inline const JsonArray& get<JsonArray const&>(JsonVariantContent c) {
-  return *c.asArray;
+inline const JsonArray& JsonVariantContent::as<JsonArray const&>() const {
+  return *asArray;
 }
 
 template <>
-inline JsonObject& get<JsonObject&>(JsonVariantContent c) {
-  return *c.asObject;
+inline JsonObject& JsonVariantContent::as<JsonObject&>() const {
+  return *asObject;
 }
 
 template <>
-inline const JsonObject& get<JsonObject const&>(JsonVariantContent c) {
-  return *c.asObject;
+inline const JsonObject& JsonVariantContent::as<JsonObject const&>() const {
+  return *asObject;
 }
 
 template <>
-inline signed char get<signed char>(JsonVariantContent c) {
-  return static_cast<signed char>(c.asLong);
+inline signed char JsonVariantContent::as<signed char>() const {
+  return static_cast<signed char>(asLong);
 }
 
 template <>
-inline signed int get<signed int>(JsonVariantContent c) {
-  return static_cast<signed int>(c.asLong);
+inline signed int JsonVariantContent::as<signed int>() const {
+  return static_cast<signed int>(asLong);
 }
 
 template <>
-inline signed long get<signed long>(JsonVariantContent c) {
-  return static_cast<signed long>(c.asLong);
+inline signed long JsonVariantContent::as<signed long>() const {
+  return static_cast<signed long>(asLong);
 }
 
 template <>
-inline signed short get<signed short>(JsonVariantContent c) {
-  return static_cast<signed short>(c.asLong);
+inline signed short JsonVariantContent::as<signed short>() const {
+  return static_cast<signed short>(asLong);
 }
 
 template <>
-inline unsigned char get<unsigned char>(JsonVariantContent c) {
-  return static_cast<unsigned char>(c.asLong);
+inline unsigned char JsonVariantContent::as<unsigned char>() const {
+  return static_cast<unsigned char>(asLong);
 }
 
 template <>
-inline unsigned int get<unsigned int>(JsonVariantContent c) {
-  return static_cast<unsigned int>(c.asLong);
+inline unsigned int JsonVariantContent::as<unsigned int>() const {
+  return static_cast<unsigned int>(asLong);
 }
 
 template <>
-inline unsigned long get<unsigned long>(JsonVariantContent c) {
-  return static_cast<unsigned long>(c.asLong);
+inline unsigned long JsonVariantContent::as<unsigned long>() const {
+  return static_cast<unsigned long>(asLong);
 }
 
 template <>
-inline unsigned short get<unsigned short>(JsonVariantContent c) {
-  return static_cast<unsigned short>(c.asLong);
+inline unsigned short JsonVariantContent::as<unsigned short>() const {
+  return static_cast<unsigned short>(asLong);
 }
 
 template <typename T>

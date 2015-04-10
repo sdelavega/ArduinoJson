@@ -84,7 +84,7 @@ inline JsonVariant::JsonVariant(unsigned short value) {
 
 template <typename T>
 inline T JsonVariant::as() const {
-  return Internals::matches<T>(_type) ? Internals::get<T>(_content)
+  return Internals::matches<T>(_type) ? _content.as<T>()
                                       : Internals::invalid<T>();
 }
 
