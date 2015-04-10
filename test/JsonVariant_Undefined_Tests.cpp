@@ -13,8 +13,8 @@ class JsonVariant_Undefined_Tests : public ::testing::Test {
   JsonVariant variant;
 };
 
-TEST_F(JsonVariant_Undefined_Tests, SuccessReturnsFalse) {
-  EXPECT_FALSE(variant.success());
+TEST_F(JsonVariant_Undefined_Tests, HasValueReturnsFalse) {
+  EXPECT_FALSE(variant.hasValue());
 }
 
 TEST_F(JsonVariant_Undefined_Tests, AsLongReturns0) {
@@ -43,30 +43,30 @@ TEST_F(JsonVariant_Undefined_Tests, AsObjectReturnInvalid) {
 
 TEST_F(JsonVariant_Undefined_Tests, CanBeSetToLong) {
   variant = 0L;
-  EXPECT_TRUE(variant.success());
+  EXPECT_TRUE(variant.hasValue());
 }
 
 TEST_F(JsonVariant_Undefined_Tests, CanBeSetToDouble) {
   variant = 0.0;
-  EXPECT_TRUE(variant.success());
+  EXPECT_TRUE(variant.hasValue());
 }
 
 TEST_F(JsonVariant_Undefined_Tests, CanBeSetToString) {
   variant = static_cast<const char*>(NULL);
-  EXPECT_TRUE(variant.success());
+  EXPECT_TRUE(variant.hasValue());
 }
 
 TEST_F(JsonVariant_Undefined_Tests, CanBeSetToBool) {
   variant = false;
-  EXPECT_TRUE(variant.success());
+  EXPECT_TRUE(variant.hasValue());
 }
 
 TEST_F(JsonVariant_Undefined_Tests, CanBeSetToArray) {
   variant = JsonArray::invalid();
-  EXPECT_TRUE(variant.success());
+  EXPECT_TRUE(variant.hasValue());
 }
 
 TEST_F(JsonVariant_Undefined_Tests, CanBeSetToObject) {
   variant = JsonObject::invalid();
-  EXPECT_TRUE(variant.success());
+  EXPECT_TRUE(variant.hasValue());
 }

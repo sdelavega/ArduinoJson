@@ -78,7 +78,7 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   JsonVariant &operator=(const JsonVariant &other);
 
   // Tells weither the variant is valid.
-  bool success() const { return _type != Internals::JSON_UNDEFINED; }
+  bool hasValue() const { return _type != Internals::JSON_UNDEFINED; }
 
   // Serialize the variant to a JsonWriter
   void writeTo(Internals::JsonWriter &writer) const;

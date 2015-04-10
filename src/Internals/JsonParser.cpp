@@ -99,7 +99,7 @@ JsonArray &JsonParser::parseArray() {
     // 1 - Parse value
     JsonVariant value;
     parseAnythingTo(value);
-    if (!value.success()) goto ERROR_INVALID_VALUE;
+    if (!value.hasValue()) goto ERROR_INVALID_VALUE;
     array.add(value);
 
     // 2 - More values?
@@ -135,7 +135,7 @@ JsonObject &JsonParser::parseObject() {
     // 2 - Parse value
     JsonVariant value;
     parseAnythingTo(value);
-    if (!value.success()) goto ERROR_INVALID_VALUE;
+    if (!value.hasValue()) goto ERROR_INVALID_VALUE;
     object.set(key, value);
 
     // 3 - More keys/values?
