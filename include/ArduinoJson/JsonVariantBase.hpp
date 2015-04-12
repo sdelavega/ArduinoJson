@@ -8,6 +8,10 @@
 
 namespace ArduinoJson {
 
+// Forward declarations.
+class JsonArraySubscript;
+class JsonObjectSubscript;
+
 template <typename TImpl>
 class JsonVariantBase {
  public:
@@ -53,6 +57,22 @@ class JsonVariantBase {
   const T as() const {
     return impl()->template as<T>();
   }
+
+  // Mimics an array or an object.
+  // Returns the size of the array or object if the variant has that type.
+  // Returns 0 if the variant is neither an array nor an object
+  size_t size() const { return asArray().size() + asObject().size(); }
+
+  // Mimics an array.
+  // Returns the element at specified index if the variant is an array.
+  // Returns JsonVariant::invalid() if the variant is not an array.
+  const JsonArraySubscript operator[](int index) const;
+
+  // Mimics an object.
+  // Returns the value associated with the specified key if the variant is
+  // an object.
+  // Return JsonVariant::invalid() if the variant is not an object.
+  const JsonObjectSubscript operator[](const char *key) const;
 
  private:
   const TImpl *impl() const { return static_cast<const TImpl *>(this); }

@@ -30,7 +30,8 @@ inline bool JsonObject::containsKey(key_type key) const {
 
 inline void JsonObject::remove(key_type key) { removeNode(getNodeAt(key)); }
 
-inline const JsonObjectSubscript JsonVariant::operator[](
+template <typename TImplem>
+inline const JsonObjectSubscript JsonVariantBase<TImplem>::operator[](
     const char *key) const {
   return asObject()[key];
 }

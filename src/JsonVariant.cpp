@@ -12,12 +12,6 @@
 using namespace ArduinoJson;
 using namespace ArduinoJson::Internals;
 
-size_t JsonVariant::size() const {
-  if (_type == JSON_ARRAY) return _content.asArray->size();
-  if (_type == JSON_OBJECT) return _content.asObject->size();
-  return 0;
-}
-
 void JsonVariant::writeTo(JsonWriter &writer) const {
   if (is<const JsonArray &>())
     as<const JsonArray &>().writeTo(writer);

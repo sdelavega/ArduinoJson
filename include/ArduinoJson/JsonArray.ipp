@@ -32,7 +32,9 @@ inline void JsonArray::set(size_t index, const JsonVariant &value) {
     add(value);
 }
 
-inline const JsonArraySubscript JsonVariant::operator[](int index) const {
+template <typename TImplem>
+inline const JsonArraySubscript JsonVariantBase<TImplem>::operator[](
+    int index) const {
   return asArray()[index];
 }
 

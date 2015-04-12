@@ -18,9 +18,7 @@ namespace ArduinoJson {
 
 // Forward declarations.
 class JsonArray;
-class JsonArraySubscript;
 class JsonObject;
-class JsonObjectSubscript;
 
 // A variant that can be a any value serializable to a JSON value.
 //
@@ -79,22 +77,6 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
 
   // Serialize the variant to a JsonWriter
   void writeTo(Internals::JsonWriter &writer) const;
-
-  // Mimics an array or an object.
-  // Returns the size of the array or object if the variant has that type.
-  // Returns 0 if the variant is neither an array nor an object
-  size_t size() const;
-
-  // Mimics an array.
-  // Returns the element at specified index if the variant is an array.
-  // Returns JsonVariant::invalid() if the variant is not an array.
-  const JsonArraySubscript operator[](int index) const;
-
-  // Mimics an object.
-  // Returns the value associated with the specified key if the variant is
-  // an object.
-  // Return JsonVariant::invalid() if the variant is not an object.
-  const JsonObjectSubscript operator[](const char *key) const;
 
  private:
   template <typename T>
