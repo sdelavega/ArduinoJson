@@ -176,11 +176,4 @@ template <>
 inline bool JsonVariant::is<unsigned short>() const {
   return _type == Internals::JSON_LONG;
 }
-
-// Copy the value of the specified variant
-inline JsonVariant &JsonVariant::operator=(const JsonVariant &other) {
-  _type = other._type;
-  _content = other._content;
-  return *this;
-}
 }

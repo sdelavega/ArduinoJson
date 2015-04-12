@@ -74,9 +74,6 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   template <typename T>
   bool is() const;
 
-  // Copy the value of the specified variant
-  JsonVariant &operator=(const JsonVariant &other);
-
   // Tells weither the variant is valid.
   bool hasValue() const { return _type != Internals::JSON_UNDEFINED; }
 
