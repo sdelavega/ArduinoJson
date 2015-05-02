@@ -38,25 +38,27 @@ bool JsonParser::skip(const char *wordToSkip) {
   return *charToSkip == '\0';
 }
 
-void JsonParser::parseAnythingTo(JsonVariant &destination) {
-  if (_nestingLimit == 0) return;
+bool JsonParser::parseAnythingTo(JsonVariant *destination) {
+  if (_nestingLimit == 0) return false;
   _nestingLimit--;
+  bool success = doParseAnythingTo(destination);
+  _nestingLimit++;
+  return success;
+}
 
+bool JsonParser::doParseAnythingTo(JsonVariant *destination) {
   skipSpaces();
 
   switch (*_ptr) {
     case '[':
-      destination = parseArray();
-      break;
+      return parseArrayTo(destination);
 
     case '{':
-      destination = parseObject();
-      break;
+      return parseObjectTo(destination);
 
     case 't':
     case 'f':
-      parseBooleanTo(destination);
-      break;
+      return parseBooleanTo(destination);
 
     case '-':
     case '.':
@@ -70,20 +72,18 @@ void JsonParser::parseAnythingTo(JsonVariant &destination) {
     case '7':
     case '8':
     case '9':
-      parseNumberTo(destination);
-      break;
+      return parseNumberTo(destination);
 
     case 'n':
-      parseNullTo(destination);
-      break;
+      return parseNullTo(destination);
 
     case '\'':
     case '\"':
-      destination = parseString();
-      break;
-  }
+      return parseStringTo(destination);
 
-  _nestingLimit++;
+    default:
+      return false;
+  }
 }
 
 JsonArray &JsonParser::parseArray() {
@@ -98,8 +98,7 @@ JsonArray &JsonParser::parseArray() {
   for (;;) {
     // 1 - Parse value
     JsonVariant value;
-    parseAnythingTo(value);
-    if (!value.hasValue()) goto ERROR_INVALID_VALUE;
+    if (!parseAnythingTo(&value)) goto ERROR_INVALID_VALUE;
     array.add(value);
 
     // 2 - More values?
@@ -115,6 +114,14 @@ ERROR_INVALID_VALUE:
 ERROR_MISSING_BRACKET:
 ERROR_MISSING_COMMA:
   return JsonArray::invalid();
+}
+
+bool JsonParser::parseArrayTo(JsonVariant *destination) {
+  JsonArray &array = parseArray();
+  if (!array.success()) return false;
+
+  *destination = array;
+  return true;
 }
 
 JsonObject &JsonParser::parseObject() {
@@ -134,8 +141,7 @@ JsonObject &JsonParser::parseObject() {
 
     // 2 - Parse value
     JsonVariant value;
-    parseAnythingTo(value);
-    if (!value.hasValue()) goto ERROR_INVALID_VALUE;
+    if (!parseAnythingTo(&value)) goto ERROR_INVALID_VALUE;
     object.set(key, value);
 
     // 3 - More keys/values?
@@ -155,14 +161,27 @@ ERROR_MISSING_COMMA:
   return JsonObject::invalid();
 }
 
-void JsonParser::parseBooleanTo(JsonVariant &destination) {
-  if (skip("true"))
-    destination = true;
-  else if (skip("false"))
-    destination = false;
+bool JsonParser::parseObjectTo(JsonVariant *destination) {
+  JsonObject &object = parseObject();
+  if (!object.success()) return false;
+
+  *destination = object;
+  return true;
 }
 
-void JsonParser::parseNumberTo(JsonVariant &destination) {
+bool JsonParser::parseBooleanTo(JsonVariant *destination) {
+  if (skip("true")) {
+    *destination = true;
+    return true;
+  } else if (skip("false")) {
+    *destination = false;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool JsonParser::parseNumberTo(JsonVariant *destination) {
   char *endOfLong;
   long longValue = strtol(_ptr, &endOfLong, 10);
   char stopChar = *endOfLong;
@@ -176,19 +195,27 @@ void JsonParser::parseNumberTo(JsonVariant &destination) {
     // Count the decimal digits
     uint8_t decimals = static_cast<uint8_t>(_ptr - endOfLong - 1);
     // Set the variant as a double
-    destination = JsonVariant(doubleValue, decimals);
+    *destination = JsonVariant(doubleValue, decimals);
   } else {
     // No => set the variant as a long
     _ptr = endOfLong;
-    destination = longValue;
+    *destination = longValue;
   }
+  return true;
 }
 
-void JsonParser::parseNullTo(JsonVariant &destination) {
+bool JsonParser::parseNullTo(JsonVariant *destination) {
   const char *NULL_STRING = NULL;
-  if (skip("null")) destination = NULL_STRING;
+  if (!skip("null")) return false;
+  *destination = NULL_STRING;
+  return true;
 }
 
 const char *JsonParser::parseString() {
   return QuotedString::extractFrom(_ptr, &_ptr);
+}
+
+bool JsonParser::parseStringTo(JsonVariant *destination) {
+  *destination = QuotedString::extractFrom(_ptr, &_ptr);
+  return true;
 }
