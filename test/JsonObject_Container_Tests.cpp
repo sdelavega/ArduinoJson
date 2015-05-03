@@ -111,16 +111,11 @@ TEST_F(JsonObject_Container_Tests, CanStoreInnerObjects) {
   EXPECT_EQ(&innerObject2, &_object["world"].asObject());
 }
 
-TEST_F(JsonObject_Container_Tests, ContainsKeyReturnFalseForNonExistingKey) {
+TEST_F(JsonObject_Container_Tests, ContainsKeyReturnsFalseForNonExistingKey) {
   EXPECT_FALSE(_object.containsKey("hello"));
 }
 
-TEST_F(JsonObject_Container_Tests, ContainsKeyReturnTrueForDefinedValue) {
+TEST_F(JsonObject_Container_Tests, ContainsKeyReturnsTrueForDefinedValue) {
   _object.set("hello", 42);
   EXPECT_TRUE(_object.containsKey("hello"));
-}
-
-TEST_F(JsonObject_Container_Tests, ContainsKeyReturnFalseForUndefinedValue) {
-  _object.set("hello", JsonVariant());
-  EXPECT_FALSE(_object.containsKey("hello"));
 }

@@ -72,9 +72,6 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   template <typename T>
   bool is() const;
 
-  // Tells weither the variant is valid.
-  bool hasValue() const { return _type != Internals::JSON_UNDEFINED; }
-
   // Serialize the variant to a JsonWriter
   void writeTo(Internals::JsonWriter &writer) const;
 
