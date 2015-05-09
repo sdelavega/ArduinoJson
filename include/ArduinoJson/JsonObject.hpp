@@ -41,19 +41,20 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Create an empty JsonArray attached to the specified JsonBuffer.
   // You should not use this constructor directly.
   // Instead, use JsonBuffer::createObject() or JsonBuffer.parseObject().
-  explicit JsonObject(JsonBuffer *buffer) : Internals::List<JsonPair>(buffer) {}
+  JSON_FORCE_INLINE explicit JsonObject(JsonBuffer *buffer)
+      : Internals::List<JsonPair>(buffer) {}
 
   // Gets or sets the value associated with the specified key.
-  JsonObjectSubscript operator[](key_type key);
+  JSON_FORCE_INLINE JsonObjectSubscript operator[](key_type key);
 
   // Gets the value associated with the specified key.
-  const JsonObjectSubscript operator[](key_type key) const;
+  JSON_FORCE_INLINE const JsonObjectSubscript operator[](key_type key) const;
 
   // Sets the specified key with the specified value.
   void set(key_type key, const JsonVariant &value);
 
   // Gets the value associated with the specified key.
-  JsonVariant get(key_type key) const;
+  JSON_FORCE_INLINE JsonVariant get(key_type key) const;
 
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
@@ -64,7 +65,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JsonObject &createNestedObject(key_type key);
 
   // Tells weither the specified key is present and associated with a value.
-  bool containsKey(key_type key) const;
+  JSON_FORCE_INLINE bool containsKey(key_type key) const;
 
   // Removes the specified key and the associated value.
   void remove(key_type key);

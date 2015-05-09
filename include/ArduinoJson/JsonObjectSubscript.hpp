@@ -11,25 +11,25 @@
 namespace ArduinoJson {
 class JsonObjectSubscript : public JsonVariantBase<JsonObjectSubscript> {
  public:
-  JsonObjectSubscript(JsonObject& object, const char* key)
+  JSON_FORCE_INLINE JsonObjectSubscript(JsonObject& object, const char* key)
       : _object(object), _key(key) {}
 
-  JsonObjectSubscript& operator=(const JsonVariant& value) {
+  JSON_FORCE_INLINE JsonObjectSubscript& operator=(const JsonVariant& value) {
     _object.set(_key, value);
     return *this;
   }
 
-  bool success() const { return _object.containsKey(_key); }
+  JSON_FORCE_INLINE bool success() const { return _object.containsKey(_key); }
 
-  operator JsonVariant() const { return _object.get(_key); }
+  JSON_FORCE_INLINE operator JsonVariant() const { return _object.get(_key); }
 
   template <typename T>
-  T as() const {
+  JSON_FORCE_INLINE T as() const {
     return _object.get(_key).as<T>();
   }
 
   template <typename T>
-  T is() const {
+  JSON_FORCE_INLINE T is() const {
     return _object.get(_key).is<T>();
   }
 

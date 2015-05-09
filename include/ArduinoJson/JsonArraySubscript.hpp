@@ -11,25 +11,25 @@
 namespace ArduinoJson {
 class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript> {
  public:
-  JsonArraySubscript(JsonArray& array, size_t index)
+  JSON_FORCE_INLINE JsonArraySubscript(JsonArray& array, size_t index)
       : _array(array), _index(index) {}
 
-  JsonArraySubscript& operator=(const JsonVariant& value) {
+  JSON_FORCE_INLINE JsonArraySubscript& operator=(const JsonVariant& value) {
     _array.set(_index, value);
     return *this;
   }
 
-  bool success() const { return _index < _array.size(); }
+  JSON_FORCE_INLINE bool success() const { return _index < _array.size(); }
 
-  operator JsonVariant() const { return _array.get(_index); }
+  JSON_FORCE_INLINE operator JsonVariant() const { return _array.get(_index); }
 
   template <typename T>
-  T as() const {
+  JSON_FORCE_INLINE T as() const {
     return _array.get(_index).as<T>();
   }
 
   template <typename T>
-  T is() const {
+  JSON_FORCE_INLINE T is() const {
     return _array.get(_index).is<T>();
   }
 
