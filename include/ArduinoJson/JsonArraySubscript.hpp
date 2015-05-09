@@ -25,7 +25,7 @@ class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript> {
 
   template <typename T>
   JSON_FORCE_INLINE T as() const {
-    return _array.get(_index).as<T>();
+    return _array.get<T>(_index);
   }
 
   template <typename T>

@@ -75,10 +75,11 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   // Serialize the variant to a JsonWriter
   void writeTo(Internals::JsonWriter &writer) const;
 
- private:
+  // TODO: rename
   template <typename T>
   static T invalid();
 
+ private:
   // The current type of the variant
   Internals::JsonVariantType _type;
 

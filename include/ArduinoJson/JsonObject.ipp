@@ -16,6 +16,12 @@ inline JsonVariant JsonObject::get(key_type key) const {
   return node ? node->content.value : JsonVariant();
 }
 
+template <typename T>
+inline T JsonObject::get(key_type key) const {
+  node_type *node = getNodeAt(key);
+  return node ? node->content.value.as<T>() : JsonVariant::invalid<T>();
+}
+
 inline JsonObjectSubscript JsonObject::operator[](key_type key) {
   return JsonObjectSubscript(*this, key);
 }

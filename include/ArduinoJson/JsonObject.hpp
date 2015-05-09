@@ -56,6 +56,9 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   // Gets the value associated with the specified key.
   JSON_FORCE_INLINE JsonVariant get(key_type key) const;
 
+  template <typename T>
+  JSON_FORCE_INLINE T get(key_type key) const;
+
   // Creates and adds a JsonArray.
   // This is a shortcut for JsonBuffer::createArray() and JsonObject::add().
   JsonArray &createNestedArray(key_type key);

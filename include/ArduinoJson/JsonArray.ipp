@@ -24,6 +24,12 @@ inline JsonVariant JsonArray::get(size_t index) const {
   return node ? node->content : JsonVariant();
 }
 
+template <typename T>
+inline T JsonArray::get(size_t index) const {
+  node_type *node = getNodeAt(index);
+  return node ? node->content.as<T>() : JsonVariant::invalid<T>();
+}
+
 inline void JsonArray::set(size_t index, const JsonVariant &value) {
   node_type *node = getNodeAt(index);
   if (node)

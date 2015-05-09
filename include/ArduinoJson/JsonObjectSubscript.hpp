@@ -25,7 +25,7 @@ class JsonObjectSubscript : public JsonVariantBase<JsonObjectSubscript> {
 
   template <typename T>
   JSON_FORCE_INLINE T as() const {
-    return _object.get(_key).as<T>();
+    return _object.get<T>(_key);
   }
 
   template <typename T>
