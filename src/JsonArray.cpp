@@ -20,7 +20,7 @@ JsonArray::node_type *JsonArray::getNodeAt(size_t index) const {
   return node;
 }
 
-void JsonArray::add(const JsonVariant &value) {
+void JsonArray::add(const JsonVariant value) {
   node_type *node = createNode();
   if (node) {
     addNode(node);

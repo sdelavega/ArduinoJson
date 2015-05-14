@@ -17,7 +17,7 @@ using namespace ArduinoJson::Internals;
 
 JsonObject JsonObject::_invalid(NULL);
 
-void JsonObject::set(const char *key, const JsonVariant &value) {
+void JsonObject::set(const char *key, const JsonVariant value) {
   // try to find an existing node
   node_type *node = getNodeAt(key);
 

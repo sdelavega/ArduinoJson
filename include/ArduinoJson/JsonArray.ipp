@@ -36,12 +36,9 @@ inline T JsonArray::is(size_t index) const {
   return node ? node->content.is<T>() : false;
 }
 
-inline void JsonArray::set(size_t index, const JsonVariant &value) {
+inline void JsonArray::set(size_t index, const JsonVariant value) {
   node_type *node = getNodeAt(index);
-  if (node)
-    node->content = value;
-  else
-    add(value);
+  if (node) node->content = value;
 }
 
 template <typename TImplem>

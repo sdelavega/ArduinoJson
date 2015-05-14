@@ -42,16 +42,16 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
       : Internals::List<JsonVariant>(buffer) {}
 
   // Gets the value at the specified index
-  const JsonArraySubscript operator[](size_t index) const;
+  JSON_FORCE_INLINE const JsonArraySubscript operator[](size_t index) const;
 
   // Gets or sets the value at specified index
-  JsonArraySubscript operator[](size_t index);
+  JSON_FORCE_INLINE JsonArraySubscript operator[](size_t index);
 
   // Adds the specified value at the end of the array.
-  void add(const JsonVariant &value);
+  void add(const JsonVariant value);
 
   // Sets the value at specified index.
-  void set(size_t index, const JsonVariant &value);
+  JSON_FORCE_INLINE void set(size_t index, const JsonVariant value);
 
   // Gets the value at the specified index.
   JSON_FORCE_INLINE JsonVariant get(size_t index) const;
