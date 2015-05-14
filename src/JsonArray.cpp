@@ -42,6 +42,8 @@ JsonObject &JsonArray::createNestedObject() {
   return object;
 }
 
+void JsonArray::removeAt(size_t index) { removeNode(getNodeAt(index)); }
+
 void JsonArray::writeTo(JsonWriter &writer) const {
   writer.beginArray();
 

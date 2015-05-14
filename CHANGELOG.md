@@ -1,6 +1,18 @@
 Arduino JSON: change log
 ========================
 
+v4.4
+----
+
+* Added `JsonArray::measureLength()` and `JsonObject::measureLength()` (issue #75)
+
+v4.3
+----
+
+* Added `JsonArray::removeAt()` to remove an element of an array (issue #58)
+* Fixed stack-overflow in `DynamicJsonBuffer` when parsing huge JSON files (issue #65)
+* Fixed wrong return value of `parseArray()` and `parseObject()` when allocation fails (issue #68)
+
 v4.2
 ----
 

@@ -72,6 +72,9 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   // It's a shortcut for JsonBuffer::createObject() and JsonArray::add()
   JsonObject &createNestedObject();
 
+  // Removes element at specified index.
+  void removeAt(size_t index);
+
   // Returns a reference an invalid JsonArray.
   // This object is meant to replace a NULL pointer.
   // This is used when memory allocation or JSON parsing fail.
