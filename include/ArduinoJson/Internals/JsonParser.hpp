@@ -29,7 +29,7 @@ class JsonParser {
   void skipSpaces();
 
   bool parseAnythingTo(JsonVariant *destination);
-  bool doParseAnythingTo(JsonVariant *destination);
+  bool parseAnythingToUnsafe(JsonVariant *destination);
 
   const char *parseString();
 

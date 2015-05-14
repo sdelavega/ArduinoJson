@@ -41,12 +41,12 @@ bool JsonParser::skip(const char *wordToSkip) {
 bool JsonParser::parseAnythingTo(JsonVariant *destination) {
   if (_nestingLimit == 0) return false;
   _nestingLimit--;
-  bool success = doParseAnythingTo(destination);
+  bool success = parseAnythingToUnsafe(destination);
   _nestingLimit++;
   return success;
 }
 
-bool JsonParser::doParseAnythingTo(JsonVariant *destination) {
+bool JsonParser::parseAnythingToUnsafe(JsonVariant *destination) {
   skipSpaces();
 
   switch (*_ptr) {
@@ -77,12 +77,8 @@ bool JsonParser::doParseAnythingTo(JsonVariant *destination) {
     case 'n':
       return parseNullTo(destination);
 
-    case '\'':
-    case '\"':
-      return parseStringTo(destination);
-
     default:
-      return false;
+      return parseStringTo(destination);
   }
 }
 
@@ -216,6 +212,6 @@ const char *JsonParser::parseString() {
 }
 
 bool JsonParser::parseStringTo(JsonVariant *destination) {
-  *destination = QuotedString::extractFrom(_ptr, &_ptr);
+  *destination = parseString();
   return true;
 }
