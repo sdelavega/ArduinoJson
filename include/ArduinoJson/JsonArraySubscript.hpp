@@ -30,7 +30,7 @@ class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript> {
 
   template <typename T>
   JSON_FORCE_INLINE T is() const {
-    return _array.get(_index).is<T>();
+    return _array.is<T>(_index);
   }
 
  private:
