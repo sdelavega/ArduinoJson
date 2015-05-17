@@ -20,12 +20,6 @@ JsonArray::node_type *JsonArray::getNodeAt(size_t index) const {
   return node;
 }
 
-bool JsonArray::add(const JsonVariant value) {
-  node_type *node = addNewNode();
-  if (node) node->content = value;
-  return node != NULL;
-}
-
 JsonArray &JsonArray::createNestedArray() {
   if (!_buffer) return JsonArray::invalid();
   JsonArray &array = _buffer->createArray();

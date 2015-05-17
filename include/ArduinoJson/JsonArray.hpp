@@ -48,7 +48,7 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
   JSON_FORCE_INLINE JsonArraySubscript operator[](size_t index);
 
   // Adds the specified value at the end of the array.
-  bool add(const JsonVariant value);
+  JSON_FORCE_INLINE bool add(const JsonVariant value);
 
   // Sets the value at specified index.
   JSON_FORCE_INLINE void set(size_t index, const JsonVariant value);

@@ -19,6 +19,12 @@ inline const JsonArraySubscript JsonArray::operator[](size_t index) const {
   return JsonArraySubscript(*const_cast<JsonArray *>(this), index);
 }
 
+inline bool JsonArray::add(const JsonVariant value) {
+  node_type *node = addNewNode();
+  if (node) node->content = value;
+  return node != NULL;
+}
+
 inline JsonVariant JsonArray::get(size_t index) const {
   node_type *node = getNodeAt(index);
   return node ? node->content : JsonVariant();
