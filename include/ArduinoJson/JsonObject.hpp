@@ -51,7 +51,7 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
   JSON_FORCE_INLINE const JsonObjectSubscript operator[](key_type key) const;
 
   // Sets the specified key with the specified value.
-  bool set(key_type key, const JsonVariant value);
+  JSON_FORCE_INLINE bool set(key_type key, const JsonVariant value);
 
   // Gets the value associated with the specified key.
   JSON_FORCE_INLINE JsonVariant get(key_type key) const;
@@ -89,6 +89,8 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
  private:
   // Returns the list node that matches the specified key.
   node_type *getNodeAt(key_type key) const;
+
+  node_type *getOrCreateNodeAt(const char *key);
 
   // The instance returned by JsonObject::invalid()
   static JsonObject _invalid;

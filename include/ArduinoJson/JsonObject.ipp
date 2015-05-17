@@ -42,6 +42,15 @@ inline bool JsonObject::containsKey(key_type key) const {
 
 inline void JsonObject::remove(key_type key) { removeNode(getNodeAt(key)); }
 
+inline bool JsonObject::set(const char *key, const JsonVariant value) {
+  node_type *node = getOrCreateNodeAt(key);
+  if (!node) return false;
+
+  node->content.key = key;
+  node->content.value = value;
+  return true;
+}
+
 template <typename TImplem>
 inline const JsonObjectSubscript JsonVariantBase<TImplem>::operator[](
     const char *key) const {

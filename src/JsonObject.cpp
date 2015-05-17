@@ -17,21 +17,12 @@ using namespace ArduinoJson::Internals;
 
 JsonObject JsonObject::_invalid(NULL);
 
-bool JsonObject::set(const char *key, const JsonVariant value) {
-  node_type *node = getNodeAt(key);
-  if (node) goto SUCCESS_ALREADY_EXISTS;
+JsonObject::node_type *JsonObject::getOrCreateNodeAt(const char *key) {
+  node_type *existingNode = getNodeAt(key);
+  if (existingNode) return existingNode;
 
-  node = addNewNode();
-  if (!node) goto ERROR_NO_MEMORY;
-
-  node->content.key = key;
-
-SUCCESS_ALREADY_EXISTS:
-  node->content.value = value;
-  return true;
-
-ERROR_NO_MEMORY:
-  return false;
+  node_type *newNode = addNewNode();
+  return newNode;
 }
 
 JsonArray &JsonObject::createNestedArray(const char *key) {
