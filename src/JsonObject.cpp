@@ -23,11 +23,9 @@ void JsonObject::set(const char *key, const JsonVariant value) {
 
   // not found => create a new one
   if (!node) {
-    node = createNode();
+    node = addNewNode();
     if (!node) return;  // not enough memory
-
     node->content.key = key;
-    addNode(node);
   }
 
   node->content.value = value;
