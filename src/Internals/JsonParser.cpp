@@ -95,7 +95,7 @@ JsonArray &JsonParser::parseArray() {
     // 1 - Parse value
     JsonVariant value;
     if (!parseAnythingTo(&value)) goto ERROR_INVALID_VALUE;
-    array.add(value);
+    if (!array.add(value)) goto ERROR_NO_MEMORY;
 
     // 2 - More values?
     if (skip(']')) goto SUCCES_NON_EMPTY_ARRAY;
@@ -109,6 +109,7 @@ SUCCES_NON_EMPTY_ARRAY:
 ERROR_INVALID_VALUE:
 ERROR_MISSING_BRACKET:
 ERROR_MISSING_COMMA:
+ERROR_NO_MEMORY:
   return JsonArray::invalid();
 }
 

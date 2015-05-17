@@ -20,9 +20,10 @@ JsonArray::node_type *JsonArray::getNodeAt(size_t index) const {
   return node;
 }
 
-void JsonArray::add(const JsonVariant value) {
+bool JsonArray::add(const JsonVariant value) {
   node_type *node = addNewNode();
   if (node) node->content = value;
+  return node != NULL;
 }
 
 JsonArray &JsonArray::createNestedArray() {
