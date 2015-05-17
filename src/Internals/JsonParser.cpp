@@ -139,7 +139,7 @@ JsonObject &JsonParser::parseObject() {
     // 2 - Parse value
     JsonVariant value;
     if (!parseAnythingTo(&value)) goto ERROR_INVALID_VALUE;
-    object.set(key, value);
+    if (!object.set(key, value)) goto ERROR_NO_MEMORY;
 
     // 3 - More keys/values?
     if (skip('}')) goto SUCCESS_NON_EMPTY_OBJECT;
@@ -155,6 +155,7 @@ ERROR_INVALID_VALUE:
 ERROR_MISSING_BRACE:
 ERROR_MISSING_COLON:
 ERROR_MISSING_COMMA:
+ERROR_NO_MEMORY:
   return JsonObject::invalid();
 }
 
