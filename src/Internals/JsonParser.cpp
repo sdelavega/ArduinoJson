@@ -214,6 +214,7 @@ const char *JsonParser::parseString() {
 }
 
 bool JsonParser::parseStringTo(JsonVariant *destination) {
-  *destination = parseString();
-  return true;
+  const char *value = parseString();
+  *destination = value;
+  return value != NULL;
 }
