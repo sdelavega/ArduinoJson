@@ -6,10 +6,8 @@
 
 #include "../../include/ArduinoJson/Internals/JsonParser.hpp"
 
-#include <stdlib.h>  // for strtol, strtod
-#include <ctype.h>
-
-#include "../../include/ArduinoJson/Internals/QuotedString.hpp"
+#include "../../include/ArduinoJson/Internals/Comments.hpp"
+#include "../../include/ArduinoJson/Internals/Encoding.hpp"
 #include "../../include/ArduinoJson/JsonArray.hpp"
 #include "../../include/ArduinoJson/JsonBuffer.hpp"
 #include "../../include/ArduinoJson/JsonObject.hpp"
@@ -17,25 +15,12 @@
 using namespace ArduinoJson;
 using namespace ArduinoJson::Internals;
 
-void JsonParser::skipSpaces() {
-  while (isspace(*_ptr)) _ptr++;
-}
-
 bool JsonParser::skip(char charToSkip) {
-  skipSpaces();
-  if (*_ptr != charToSkip) return false;
-  _ptr++;
-  skipSpaces();
+  const char *ptr = skipSpacesAndComments(_readPtr);
+  if (*ptr != charToSkip) return false;
+  ptr++;
+  _readPtr = skipSpacesAndComments(ptr);
   return true;
-}
-
-bool JsonParser::skip(const char *wordToSkip) {
-  const char *charToSkip = wordToSkip;
-  while (*charToSkip && *_ptr == *charToSkip) {
-    charToSkip++;
-    _ptr++;
-  }
-  return *charToSkip == '\0';
 }
 
 bool JsonParser::parseAnythingTo(JsonVariant *destination) {
@@ -47,35 +32,14 @@ bool JsonParser::parseAnythingTo(JsonVariant *destination) {
 }
 
 inline bool JsonParser::parseAnythingToUnsafe(JsonVariant *destination) {
-  skipSpaces();
+  _readPtr = skipSpacesAndComments(_readPtr);
 
-  switch (*_ptr) {
+  switch (*_readPtr) {
     case '[':
       return parseArrayTo(destination);
 
     case '{':
       return parseObjectTo(destination);
-
-    case 't':
-    case 'f':
-      return parseBooleanTo(destination);
-
-    case '-':
-    case '.':
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-      return parseNumberTo(destination);
-
-    case 'n':
-      return parseNullTo(destination);
 
     default:
       return parseStringTo(destination);
@@ -167,54 +131,70 @@ bool JsonParser::parseObjectTo(JsonVariant *destination) {
   return true;
 }
 
-bool JsonParser::parseBooleanTo(JsonVariant *destination) {
-  if (skip("true")) {
-    *destination = true;
-    return true;
-  } else if (skip("false")) {
-    *destination = false;
-    return true;
-  } else {
-    return false;
-  }
+static inline bool isInRange(char c, char min, char max) {
+  return min <= c && c <= max;
 }
 
-bool JsonParser::parseNumberTo(JsonVariant *destination) {
-  char *endOfLong;
-  long longValue = strtol(_ptr, &endOfLong, 10);
-  char stopChar = *endOfLong;
-
-  // Could it be a floating point value?
-  bool couldBeFloat = stopChar == '.' || stopChar == 'e' || stopChar == 'E';
-
-  if (couldBeFloat) {
-    // Yes => parse it as a double
-    double doubleValue = strtod(_ptr, &_ptr);
-    // Count the decimal digits
-    uint8_t decimals = static_cast<uint8_t>(_ptr - endOfLong - 1);
-    // Set the variant as a double
-    *destination = JsonVariant(doubleValue, decimals);
-  } else {
-    // No => set the variant as a long
-    _ptr = endOfLong;
-    *destination = longValue;
-  }
-  return true;
+static inline bool isLetterOrNumber(char c) {
+  return isInRange(c, '0', '9') || isInRange(c, 'a', 'z') ||
+         isInRange(c, 'A', 'Z') || c == '-' || c == '.';
 }
 
-bool JsonParser::parseNullTo(JsonVariant *destination) {
-  const char *NULL_STRING = NULL;
-  if (!skip("null")) return false;
-  *destination = NULL_STRING;
-  return true;
-}
+static inline bool isQuote(char c) { return c == '\'' || c == '\"'; }
 
 const char *JsonParser::parseString() {
-  return QuotedString::extractFrom(_ptr, &_ptr);
+  const char *readPtr = _readPtr;
+  char *writePtr = _writePtr;
+
+  char c = *readPtr;
+
+  if (isQuote(c)) {  // quotes
+    char stopChar = c;
+    for (;;) {
+      c = *++readPtr;
+      if (c == '\0') break;
+
+      if (c == stopChar) {
+        readPtr++;
+        break;
+      }
+
+      if (c == '\\') {
+        // replace char
+        c = Encoding::unescapeChar(*++readPtr);
+        if (c == '\0') break;
+      }
+
+      *writePtr++ = c;
+    }
+  } else {  // no quotes
+    for (;;) {
+      if (!isLetterOrNumber(c)) break;
+      *writePtr++ = c;
+      c = *++readPtr;
+    }
+  }
+  // end the string here
+  *writePtr++ = '\0';
+
+  const char *startPtr = _writePtr;
+
+  // update end ptr
+  _readPtr = readPtr;
+  _writePtr = writePtr;
+
+  // return pointer to unquoted string
+  return startPtr;
 }
 
 bool JsonParser::parseStringTo(JsonVariant *destination) {
+  bool hasQuotes = isQuote(_readPtr[0]);
   const char *value = parseString();
-  *destination = value;
-  return value != NULL;
+  if (value == NULL) return false;
+  if (hasQuotes) {
+    *destination = value;
+  } else {
+    *destination = Unparsed(value);
+  }
+  return true;
 }

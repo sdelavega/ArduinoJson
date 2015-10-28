@@ -42,16 +42,48 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
       : Internals::List<JsonVariant>(buffer) {}
 
   // Gets the value at the specified index
-  FORCE_INLINE const JsonArraySubscript operator[](size_t index) const;
+  FORCE_INLINE JsonVariant operator[](size_t index) const;
 
   // Gets or sets the value at specified index
   FORCE_INLINE JsonArraySubscript operator[](size_t index);
 
   // Adds the specified value at the end of the array.
-  FORCE_INLINE bool add(const JsonVariant value);
+  FORCE_INLINE bool add(bool value);
+  FORCE_INLINE bool add(float value, uint8_t decimals = 2);
+  FORCE_INLINE bool add(double value, uint8_t decimals = 2);
+  FORCE_INLINE bool add(signed char value);
+  FORCE_INLINE bool add(signed long value);
+  FORCE_INLINE bool add(signed int value);
+  FORCE_INLINE bool add(signed short value);
+  FORCE_INLINE bool add(unsigned char value);
+  FORCE_INLINE bool add(unsigned long value);
+  FORCE_INLINE bool add(unsigned int value);
+  FORCE_INLINE bool add(unsigned short value);
+  FORCE_INLINE bool add(const char *value);
+  FORCE_INLINE bool add(const String &value);
+  FORCE_INLINE bool add(JsonArray &array);
+  FORCE_INLINE bool add(JsonObject &object);
+  template <typename T>
+  FORCE_INLINE bool add(const T &value);
 
   // Sets the value at specified index.
-  FORCE_INLINE void set(size_t index, const JsonVariant value);
+  FORCE_INLINE void set(size_t index, bool value);
+  FORCE_INLINE void set(size_t index, float value, uint8_t decimals = 2);
+  FORCE_INLINE void set(size_t index, double value, uint8_t decimals = 2);
+  FORCE_INLINE void set(size_t index, signed char value);
+  FORCE_INLINE void set(size_t index, signed long value);
+  FORCE_INLINE void set(size_t index, signed int value);
+  FORCE_INLINE void set(size_t index, signed short value);
+  FORCE_INLINE void set(size_t index, unsigned char value);
+  FORCE_INLINE void set(size_t index, unsigned long value);
+  FORCE_INLINE void set(size_t index, unsigned int value);
+  FORCE_INLINE void set(size_t index, unsigned short value);
+  FORCE_INLINE void set(size_t index, const char *value);
+  FORCE_INLINE void set(size_t index, const String &value);
+  FORCE_INLINE void set(size_t index, JsonArray &array);
+  FORCE_INLINE void set(size_t index, JsonObject &object);
+  template <typename T>
+  FORCE_INLINE void set(size_t index, const T &value);
 
   // Gets the value at the specified index.
   FORCE_INLINE JsonVariant get(size_t index) const;
@@ -62,7 +94,7 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
 
   // Check the type of the value at specified index.
   template <typename T>
-  FORCE_INLINE T is(size_t index) const;
+  FORCE_INLINE bool is(size_t index) const;
 
   // Creates a JsonArray and adds a reference at the end of the array.
   // It's a shortcut for JsonBuffer::createArray() and JsonArray::add()
@@ -85,6 +117,15 @@ class JsonArray : public Internals::JsonPrintable<JsonArray>,
 
  private:
   node_type *getNodeAt(size_t index) const;
+
+  template <typename TValue>
+  void setNodeAt(size_t index, TValue value);
+
+  template <typename TValue>
+  bool addNode(TValue);
+
+  template <typename T>
+  FORCE_INLINE void setNodeValue(node_type *, T value);
 
   // The instance returned by JsonArray::invalid()
   static JsonArray _invalid;

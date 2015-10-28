@@ -9,10 +9,10 @@
 #include <stddef.h>
 #include <stdint.h>  // for uint8_t
 
-#include "Arduino/String.hpp"
 #include "Internals/JsonPrintable.hpp"
 #include "Internals/JsonVariantContent.hpp"
 #include "Internals/JsonVariantType.hpp"
+#include "Internals/Unparsed.hpp"
 #include "JsonVariantBase.hpp"
 
 namespace ArduinoJson {
@@ -28,8 +28,7 @@ class JsonObject;
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
 // - a reference to a JsonArray or JsonObject
-class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
-                    public JsonVariantBase<JsonVariant> {
+class JsonVariant : public JsonVariantBase<JsonVariant> {
  public:
   // Creates an uninitialized JsonVariant
   FORCE_INLINE JsonVariant() : _type(Internals::JSON_UNDEFINED) {}
@@ -56,7 +55,9 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
 
   // Create a JsonVariant containing a string.
   FORCE_INLINE JsonVariant(const char *value);
-  FORCE_INLINE JsonVariant(const String &value);
+
+  // Create a JsonVariant containing an unparsed string
+  FORCE_INLINE JsonVariant(Internals::Unparsed value);
 
   // Create a JsonVariant containing a reference to an array.
   FORCE_INLINE JsonVariant(JsonArray &array);
@@ -67,12 +68,12 @@ class JsonVariant : public Internals::JsonPrintable<JsonVariant>,
   // Get the variant as the specified type.
   // See cast operators for details.
   template <typename T>
-  FORCE_INLINE T as() const;
+  T as() const;
 
   // Tells weither the variant has the specified type.
   // Returns true if the variant has type type T, false otherwise.
   template <typename T>
-  FORCE_INLINE bool is() const;
+  bool is() const;
 
   // Serialize the variant to a JsonWriter
   void writeTo(Internals::JsonWriter &writer) const;
